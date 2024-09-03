@@ -1,10 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
-import sys
 
 from typing import Callable
-
-print(sys.version)
 
 def gemini_response_generator(model: genai.GenerativeModel, prompt: str) -> str:
     """
