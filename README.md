@@ -1,4 +1,13 @@
 # LMM Project
+## Running the Application
+1. Add ``API_KEY`` by creating the file ``secrets.toml`` file and adding the following contents: 
+```
+[gemini]
+api_key=<your API key here>
+```
+
+2. Run with ``streamlit run main.py`` 
+
 ## Quick Reference Links
  - [Overleaf Project](https://www.overleaf.com/6182356334dzrxhqbwtjsc#a17958)
  - [Studium Project Page](https://uppsala.instructure.com/courses/94786/pages/project-announcement?module_item_id=1146885)
