@@ -1,5 +1,5 @@
 # LMM Project
-## Quick Refrence Links
+## Quick Reference Links
  - [Overleaf Project](https://www.overleaf.com/6182356334dzrxhqbwtjsc#a17958)
  - [Studium Project Page](https://uppsala.instructure.com/courses/94786/pages/project-announcement?module_item_id=1146885)
  - Youtube Videos (3blue1brown)
