@@ -16,4 +16,4 @@ api_key=<your API key here>
     - [Visual Intro to Transformers](https://youtu.be/wjZofJX0v4M)
     - [Attention Layers](https://youtu.be/eMlx5fFNoYc)
     - [Multilayer Perceptrons](https://youtu.be/9-Jl0dxWQs8)
- - [Transformers with Lucas Beyer](ttps://youtube.com/watch?v=EixI6t5oif0)
+ - [Transformers with Lucas Beyer](https://youtube.com/watch?v=EixI6t5oif0)
