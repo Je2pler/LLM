@@ -3,10 +3,10 @@
 1. Add ``API_KEY`` by creating the file ``secrets.toml`` file and adding the following contents: 
 ```
 [gemini]
-api_key=<your API key here>
+api_key="<your API key here>"
 ```
 
-2. Run with ``streamlit run main.py`` 
+2. Run with ``streamlit run demo.py`` 
 
 ## Quick Reference Links
  - [Overleaf Project](https://www.overleaf.com/6182356334dzrxhqbwtjsc#a17958)
