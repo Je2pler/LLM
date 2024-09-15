@@ -1,4 +1,5 @@
-secrets.toml
-__pycache__/
+**/secrets.toml
+./__pycache__/
 **/*.icloud
 **/.DS_Store
+.venv/
