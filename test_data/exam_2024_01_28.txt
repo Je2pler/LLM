@@ -1,0 +1,16 @@
+
+exam, question_number, question_type, question, answer
+
+1, 1, "Essay", "Explain the common objectives shared by Bayesian supervised machine learning methods and non-Bayesian supervised machine learning methods."
+1, 1, "Essay", "Contrast the representation of models in Bayesian machine learning with that of non-Bayesian approaches, highlighting key differences in terms of parameters. Use linear regression and Bayesian linear regression as examples"
+1, 1, "Essay", "Considering the continuous evolution of data in real-world scenarios, explain how Bayesian models can be advantageous in terms of updating and adapting to new information compared to non-Bayesian models."
+1, 1, "Essay", "What is the difference between a supervised machine learning problem and an unsupervised machine learning problem? Use maximum 75 words."
+1, 1, "Essay", "Consider the measurement model: $y_n = x + \epsilon_n, \quad n=1,...,N$, where all noise terms $\epsilon_n ~ \mathcal{N}(0,1^2)$, what is the mean $\mu_{x|y}$ and variance $\sigma^2_{x|y}$ of the posterior? $p(x|y_1, y_2) = \mathcal{N}(x;\mu_{x|y}, \sigma^2_{x|y}$)"
+1, 3, "Essay", "Let $X ~ p(x)$ be a random variable following a density $p(x)=\frac{1}{Z}exp(-x^4)$ where Z is an unknown constant. Your task is to compute the variance of X, i.e., computing the expectation $E[(X-E[X])^2]$ by using importance sampling. For simplicity, let us choose the proposal $q(x)=\mathcal{N}(0,\sigma^2)$ to be a Gaussian with zero mean and standard deviation $\sigma$. Run the code to plot $p(x)$ and $q(x)$. Select parameter sigma to get a proper proposal distribution. Argue for your choice of sigma. In particular, argue what problem you run into if you pick a sigma: (i) too small (ii) too large."]
+1, 3, "Programming", "Use importance sampling to compute $E[(X-E[X])^2]$ with 10000 samples and provide the answer as well as the code."
+
+
+exam_question_3_d = [1, 3, "Programming", "A Gibbs sampler is considered. "]
+exam_question_3_e = [1, 3, "Essay", "A Gibbs sampler is considered. "]
+
+
