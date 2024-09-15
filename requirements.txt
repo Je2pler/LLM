@@ -1,3 +1,7 @@
 streamlit
 google-generativeai
 chromadb
+pypdf
+langchain
+langchain-experimental
+langchain_google_genai
