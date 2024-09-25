@@ -1,3 +1,4 @@
+
 import numpy as np
 import scipy
 import matplotlib.pyplot as plt 
@@ -19,6 +20,5 @@ plt.plot(xs, q(xs))
 plt.show()
 
 # Implement your importance sampling here
-
 
 #print(expectation)
