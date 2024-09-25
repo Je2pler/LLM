@@ -4,8 +4,6 @@
 
 # The following code gives the structure for your implementation. The code is also available in the resource Programming - Problem 3.
 
- 
-
 import numpy as np
 import matplotlib.pyplot as plt
 # Generate points
@@ -35,8 +33,8 @@ x_test = np.linspace(0, 4, 100)
 #
 # Input provided in the exercise
 # -- Question 3b --
-Phi_test = np. array ([[1 ,xx , xx **2] for xx in x_test ])
-mean_test = ( Phi_test @ mu). flatten ()
+Phi_test = np.array ([[1 ,xx , xx **2] for xx in x_test ])
+mean_test = (Phi_test @ mu). flatten()
 std_test = np.sqrt(np.diag( Phi_test @ cov @ Phi_test .T) +
 sigma **2)
 # ------------------
