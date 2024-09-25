@@ -3,12 +3,16 @@ from langchain_experimental.text_splitter import SemanticChunker
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import google.generativeai as genai
 import chromadb
+import toml
 import os
 
-os.environ["GOOGLE_API_KEY"] = 'AIzaSyCWlzRrc0mFqXqv88n3vutOiWLkgFa08cE'
-genai.configure(api_key='AIzaSyCWlzRrc0mFqXqv88n3vutOiWLkgFa08cE')
+with open('.streamlit/secrets.toml', 'r') as file:
+    secrets = toml.load(file)
 
-NAME = 'sml-book'
+os.environ["GOOGLE_API_KEY"] = secrets['gemini']['api_key']
+genai.configure(api_key=secrets['gemini']['api_key'])
+
+NAME = 'APML-book'
 
 class GemeniEmbeddingFunction(chromadb.EmbeddingFunction):
     def __call__(self, input_doc: chromadb.Documents) -> chromadb.Embeddings:
@@ -30,28 +34,26 @@ else:
 
 reader = PdfReader(f'{NAME}.pdf')
 
-text_list = [page.extract_text() for page in reader.pages[70:100]]
-text_list = [text for text in text_list if len(text) > 0]
+text = '\n'.join([
+    '\n'.join(page.extract_text().split('\n')[1:-3])
+    for page in reader.pages[25:661]
+])
 
-documents = text_splitter.create_documents(
-    text_list,
-    # [{'page': i+9} for i in range(len(reader.pages[8:]))],
-)
+chunks = text_splitter.split_text(text)
 
 collection.upsert(
-    documents=[
-        document.page_content
-        for document in documents
-    ],
+    documents=chunks,
     # metadatas=[
     #     document.metadata['page']
     #     for document in documents
     # ],
     ids=[
-        f'id{x+70}'
-        for x in range(len(documents))
+        f'id{x}'
+        for x in range(len(chunks))
     ]
 )
 
-results = collection.query(query_texts='Random forest explaination', n_results=10)
+print(f'Chunks: {chunks[:50]}')
+
+results = collection.query(query_texts='Explain random forest', n_results=10)
 print('\n\n----------\n\n'.join(results['documents'][0]))
