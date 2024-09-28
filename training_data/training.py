@@ -1,57 +1,67 @@
-from pypdf import PdfReader
+import chromadb.utils.embedding_functions.google_embedding_function
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 import google.generativeai as genai
 import chromadb
 import os
 
-os.environ["GOOGLE_API_KEY"] = 'AIzaSyCWlzRrc0mFqXqv88n3vutOiWLkgFa08cE'
-genai.configure(api_key='AIzaSyCWlzRrc0mFqXqv88n3vutOiWLkgFa08cE')
+print('Configuring')
 
-NAME = 'sml-book'
+genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
+embedding_function = chromadb.utils.embedding_functions.google_embedding_function.GoogleGenerativeAiEmbeddingFunction(api_key=os.getenv('GOOGLE_API_KEY'))
 
-class GemeniEmbeddingFunction(chromadb.EmbeddingFunction):
-    def __call__(self, input_doc: chromadb.Documents) -> chromadb.Embeddings:
-        return genai.embed_content(
-            model = 'models/embedding-001',
-            task_type = 'retrieval_document',
-            content = input_doc
-        )['embedding']
+NAME = 'APML-book'
 
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-text_splitter = SemanticChunker(embeddings)
+semantic_splitter = SemanticChunker(
+    GoogleGenerativeAIEmbeddings(model="models/embedding-001"), 
+    number_of_chunks=500
+)
+
+recursive_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
 
 db = chromadb.PersistentClient('./.db')
 
+print('Initializing database')
+
 if NAME in (collection.name for collection in db.list_collections()):
-    collection = db.get_collection(NAME, embedding_function=GemeniEmbeddingFunction())
+    collection = db.get_collection(NAME, embedding_function=embedding_function)
 else:
-    collection = db.create_collection(NAME, embedding_function=GemeniEmbeddingFunction())
+    collection = db.create_collection(NAME, embedding_function=embedding_function)
 
-reader = PdfReader(f'{NAME}.pdf')
+print('Reading data')
 
-text_list = [page.extract_text() for page in reader.pages[70:100]]
-text_list = [text for text in text_list if len(text) > 0]
+with open('training_data/output.tex', encoding='utf-8') as file:
+    text = '\n'.join(file.readlines())
 
-documents = text_splitter.create_documents(
-    text_list,
-    # [{'page': i+9} for i in range(len(reader.pages[8:]))],
-)
+print('Chunking data')
 
-collection.upsert(
-    documents=[
-        document.page_content
-        for document in documents
-    ],
-    # metadatas=[
-    #     document.metadata['page']
-    #     for document in documents
-    # ],
-    ids=[
-        f'id{x+70}'
-        for x in range(len(documents))
-    ]
-)
+preliminary_chunks = semantic_splitter.split_text(text)
+chunks = list()
+I = len(preliminary_chunks)
 
-results = collection.query(query_texts='Random forest explaination', n_results=10)
+for i, chunk in enumerate(preliminary_chunks):
+    print(f'Checking {i}/{I}', end='\r')
+    if len(chunk) > 10_000:
+        chunks += recursive_splitter.split_text(chunk)
+    else:
+        chunks.append(chunk)
+
+print(f'Checking {I}/{I}')
+
+I = len(chunks)
+
+for i, chunk in enumerate(chunks):
+    print(f'Embedding {i}/{I}', end='\r')
+    collection.upsert(
+        documents=[chunk],
+        ids=[f'id{i}']
+    )
+
+print(f'Embedding: {I}/{I}')
+
+results = collection.query(query_texts=['What is the differance between supervised and unsupervised learning? '], n_results=10)
 print('\n\n----------\n\n'.join(results['documents'][0]))
