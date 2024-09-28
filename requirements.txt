@@ -8,3 +8,7 @@ langchain_google_genai
 toml
 texify
 scikit-image
+matplotlib
+opencv-python
+pdf2image
+scikit-image
