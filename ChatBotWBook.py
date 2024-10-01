@@ -1,13 +1,31 @@
 import streamlit as st
 import google.generativeai as genai
+from google.generativeai import caching
+import time
+import datetime
 
 from typing import Callable, List, Dict
 
 class ChatBot:
     def __init__(self, history: List[Dict[str, str]]):
+        
+        # Wait for the file to finish processing
+        # while self.course_book.state.name == 'PROCESSING':
+        #     print('Waiting for video to be processed.')
+        #     time.sleep(2)
+        #     self.course_book = genai.get_file(self.course_book.name)
+        # cache = caching.CachedContent.create(
+        # model='models/gemini-1.5-flash-001',
+        # display_name='coursebook', # used to identify the cache
+        # system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so.",
+        # contents=[self.course_book],
+        # ttl=datetime.timedelta(minutes=5),
+        # )
+        # self.model = genai.GenerativeModel.from_cached_content(cached_content=cache)
+        self.course_book = genai.upload_file('course_book.pdf')
         self.model = genai.GenerativeModel(
             model_name = 'gemini-1.5-flash',
-            system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
+            # system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
             )
         self.chat = self.model.start_chat(history=[
             {
@@ -16,6 +34,7 @@ class ChatBot:
             }
             for message in history
         ])
+        
     
     def __call__(self, prompt: str) -> str:
         """
@@ -24,7 +43,7 @@ class ChatBot:
         ## Parameters
          - ``prompt`` Prompt for model. 
         """
-        return self.chat.send_message(prompt).text
+        return self.chat.send_message([self.course_book, "Use the course book provided to answer the following exam question", prompt]).text
 
 def gemini_response_generator(model: genai.GenerativeModel, prompt: str) -> str:
     """
@@ -35,7 +54,8 @@ def gemini_response_generator(model: genai.GenerativeModel, prompt: str) -> str:
      - ``model`` The ``genai.GenerativeModel`` to use. 
      - ``prompt`` Prompt to submit to Gemini. 
     """
-    return model.generate_content(prompt).text
+
+    return model.generate_content(["Use the course book provided to answer the following exam question", prompt]).text
 
 def draw_page(response_generator: Callable[[str], str]) -> None:
     """
@@ -58,7 +78,7 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
     # Accept user input
     if prompt := st.chat_input('Say something...'):
         with st.chat_message('user'):
-            instruction = "You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
+            # instruction = "You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so. Use the course book provided to find an answer."
             st.markdown(prompt)
         
         st.session_state.messages.append({
