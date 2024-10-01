@@ -6,7 +6,7 @@ from typing import Callable, List, Dict
 import os
 
 class VectorDatabase:
-    GEMENI_EMBEDDING = chromadb.utils.embedding_functions.google_embedding_function.GoogleGenerativeAiEmbeddingFunction(api_key=os.getenv('GOOGLE_API_KEY'))
+    GEMENI_EMBEDDING = chromadb.utils.embedding_functions.google_embedding_function.GoogleGenerativeAiEmbeddingFunction(api_key=st.secrets.gemini.api_key)
 
     def __init__(self, collection_name: str,  embedding_function = GEMENI_EMBEDDING):
         self.db = chromadb.PersistentClient('./.db')
