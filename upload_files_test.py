@@ -1,6 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 import pandas as pd
+import os
 
 from typing import Callable, List, Dict
 
@@ -26,6 +27,20 @@ class ChatBot:
          - ``prompt`` Prompt for model. 
         """
         return self.chat.send_message(prompt).text
+    
+def save_uploaded_file(uploaded_file):
+    # Create a temporary path to save the file
+    temp_file_path = os.path.join("temp", uploaded_file.name)
+    
+    # Ensure the temp directory exists
+    if not os.path.exists("temp"):
+        os.makedirs("temp")
+    
+    # Save the file to disk
+    with open(temp_file_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+    
+    return temp_file_path
 
 def draw_page(response_generator: Callable[[str], str]) -> None:
     """
@@ -64,18 +79,9 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
         if uploaded_file is not None:
             print(uploaded_file.name)
             print(uploaded_file._file_urls.upload_url)
-            myfile = genai.upload_file(uploaded_file._file_urls.upload_url)
-            # prompt.append(myfile)
-            # Initialize a list in session state if it doesn't exist
-            # if 'uploaded_filenames' not in st.session_state:
-            #     st.session_state.uploaded_filenames = []
-            
-            # if uploaded_file not in st.session_state.uploaded_filenames:
-            #     # Store the filename
-            # st.session_state.uploaded_filenames.append(uploaded_file)
-
-            # Add the file content to the prompt
-
+            file_path = save_uploaded_file(uploaded_file)
+            myfile = genai.upload_file(file_path)
+            prompt.append(myfile)
         response = response_generator(prompt)
 
         with st.chat_message('ai'):
