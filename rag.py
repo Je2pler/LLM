@@ -5,7 +5,7 @@ import chromadb
 from typing import Callable, List, Dict
 import os
 
-class VectorDatabase:
+class VectorDatabase2:
     GEMENI_EMBEDDING = chromadb.utils.embedding_functions.google_embedding_function.GoogleGenerativeAiEmbeddingFunction(api_key=st.secrets.gemini.api_key)
 
     def __init__(self, collection_name: str,  embedding_function = GEMENI_EMBEDDING):
@@ -17,10 +17,10 @@ class VectorDatabase:
             raise ValueError(f'Could not find chroma db collection "{collection_name}"')
     
     def query(self, query_str: str) -> List[str]:
-        return self.collection.query(query_texts=[query_str])['documents']
+        return self.collection.query(query_texts=[query_str], n_results=10)['documents'][0]
 
 class ChatBot:
-    def __init__(self, history: List[Dict[str, str]], db: VectorDatabase):
+    def __init__(self, history: List[Dict[str, str]], db: VectorDatabase2):
         self.model = genai.GenerativeModel(
             model_name = 'gemini-1.5-flash',
             system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
@@ -140,7 +140,7 @@ def main() -> None:
         }]
     
     # Load db
-    db = VectorDatabase('APML-book')
+    db = VectorDatabase2('APML-book')
 
     # Create chatbot
     chat_bot = ChatBot(st.session_state.messages, db)
