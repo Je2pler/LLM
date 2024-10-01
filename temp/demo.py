@@ -1,7 +1,5 @@
 import streamlit as st
 import google.generativeai as genai
-import pandas as pd
-import os
 
 from typing import Callable, List, Dict
 
@@ -9,7 +7,7 @@ class ChatBot:
     def __init__(self, history: List[Dict[str, str]]):
         self.model = genai.GenerativeModel(
             model_name = 'gemini-1.5-flash',
-            #system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
+            system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
             )
         self.chat = self.model.start_chat(history=[
             {
@@ -19,7 +17,7 @@ class ChatBot:
             for message in history
         ])
     
-    def __call__(self, prompt: list) -> str:
+    def __call__(self, prompt: str) -> str:
         """
         Generate response to prompt. 
 
@@ -27,24 +25,21 @@ class ChatBot:
          - ``prompt`` Prompt for model. 
         """
         return self.chat.send_message(prompt).text
-    
-def save_uploaded_file(uploaded_file):
-    # Create a temporary path to save the file
-    temp_file_path = os.path.join("temp", uploaded_file.name)
-    
-    # Ensure the temp directory exists
-    if not os.path.exists("temp"):
-        os.makedirs("temp")
-    
-    # Save the file to disk
-    with open(temp_file_path, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    
-    return temp_file_path
+
+def gemini_response_generator(model: genai.GenerativeModel, prompt: str) -> str:
+    """
+    Produces a response for the ``prompt``
+    through the Google Gemeni API. 
+
+    ## Parameters
+     - ``model`` The ``genai.GenerativeModel`` to use. 
+     - ``prompt`` Prompt to submit to Gemini. 
+    """
+    return model.generate_content(prompt).text
 
 def draw_page(response_generator: Callable[[str], str]) -> None:
     """
-    Produces Streamlit page. 
+    Produces streamlit page. 
 
     ## Parameters
      - ``response_generator`` Callback function to generate response. 
@@ -52,9 +47,8 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
     # Write title
     st.header('1RT730 Chatbot')
 
-    st.sidebar.title("Predefined functions")
+    st.sidebar.title("Predefinied functions")
     st.sidebar.button('Generate Exam', generate_exam)
-    uploaded_file = st.sidebar.file_uploader("Upload a file", label_visibility="collapsed")
 
     # Display chat history
     for message in st.session_state.messages:
@@ -62,10 +56,9 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
             st.markdown(message['content'])
 
     # Accept user input
-    prompt = st.chat_input('Say something...')
-    
-    if prompt:
+    if prompt := st.chat_input('Say something...'):
         with st.chat_message('user'):
+            instruction = "You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
             st.markdown(prompt)
         
         st.session_state.messages.append({
@@ -73,19 +66,11 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
             'content': prompt
         })
 
-        prompt = [prompt]
-
-        # Handle the uploaded file
-        if uploaded_file is not None:
-            print(uploaded_file.name)
-            print(uploaded_file._file_urls.upload_url)
-            file_path = save_uploaded_file(uploaded_file)
-            myfile = genai.upload_file(file_path)
-            prompt.append(myfile)
+        # Write response
         response = response_generator(prompt)
 
         with st.chat_message('ai'):
-            st.write(response)
+            st.write_stream(list(response))
         
         st.session_state.messages.append({
             'role': 'ai',
