@@ -4,7 +4,7 @@
 **/.DS_Store
 .venv/
 **/*.pdf
-.db/
+.db*/
 .env
 *.tex
 temp/
