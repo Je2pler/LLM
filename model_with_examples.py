@@ -32,13 +32,13 @@ class ChatBot:
         qa_pairs = []
         for exam_path, exam_name in zip(list_of_exams_path, list_of_exams_name):
             print('Loading question answer pairs for ', exam_name)
-            data = pd.read_csv(exam_path+exam_name,  quotechar='"', delimiter=';', escapechar='\\')
+            data = pd.read_csv(os.path.join(exam_path, exam_name), quotechar='"', delimiter=';', escapechar='\\')
             for index, row in data.iterrows():
                 question = row['question']
                 answer = row['answer']
                 if row['extra_material']!= "Null":
                     file_path = row['extra_material']
-                    myfile = genai.upload_file(exam_path+'\\'+file_path)
+                    myfile = genai.upload_file(os.path.join(exam_path,file_path))
                     question = [question, myfile]
                 if '.py' in answer:
                     with open(f'{exam_path}/{answer}', encoding='utf-8') as file:
