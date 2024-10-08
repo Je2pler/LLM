@@ -6,6 +6,11 @@ import google.generativeai as genai
 import chromadb
 import os
 
+recursive_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=5000,
+    chunk_overlap=0
+)
+
 def get_paragraphs(path: str):
     for filename in os.listdir(path):
         if filename[-4:] != '.tex':
@@ -46,33 +51,59 @@ current_page = 0
 paragraphs_on_page = 0
 
 for page_nr, paragraph in get_paragraphs('training_data/APML-book'):
-    print(f'Processing page {page_nr}', end='\r')
+    print(f'Processing page {page_nr} ({current_page}:{paragraphs_on_page})   ', end='\r')
     page_nrs.append(page_nr)
     paragraphs.append(paragraph)
+    cache_length += len(paragraph)
 
-    if cache_length < 2_500:
-        cache_length += len(paragraph)
-    else:
+    while cache_length > 2_500:
         cache_length -= len(paragraphs[0])
 
         if page_nr != current_page:
             current_page = page_nr
             paragraphs_on_page = 0
         
-        collection.upsert(
-            documents=['\n\n'.join(paragraphs)],
-            embeddings=[
-                genai.embed_content(
-                    model='models/embedding-001',
-                    content=paragraphs[0],
-                    task_type='retrieval_document',
-                    title='Probobalistic Machine Learning'
-                )['embedding']
-            ],
-            ids=[f'{current_page}:{paragraphs_on_page}']
-        )
+        content = paragraphs[0]
+
+        if len(content) < 10_000:
+            content = [content]
+        else:
+            content = recursive_splitter.split_text(content)
+        
+        for embedding_paragraph in content:
+            collection.upsert(
+                documents=['\n\n'.join(paragraphs)],
+                embeddings=[
+                    genai.embed_content(
+                        model='models/embedding-001',
+                        content=embedding_paragraph,
+                        task_type='retrieval_document',
+                        title='Probobalistic Machine Learning'
+                    )['embedding']
+                ],
+                ids=[f'{current_page}:{paragraphs_on_page}']
+            )
 
         page_nrs.pop(0)
         paragraphs.pop(0)
+        paragraphs_on_page += 1
+
+while len(paragraphs) > 0:
+    collection.upsert(
+        documents=['\n\n'.join(paragraphs)],
+        embeddings=[
+            genai.embed_content(
+                model='models/embedding-001',
+                content=paragraphs[0],
+                task_type='retrieval_document',
+                title='Probobalistic Machine Learning'
+            )['embedding']
+        ],
+        ids=[f'{current_page}:{paragraphs_on_page}']
+    )
+
+    page_nrs.pop(0)
+    paragraphs.pop(0)
+    paragraphs_on_page += 1
 
 print('\nComplete')
