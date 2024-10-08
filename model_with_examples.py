@@ -10,7 +10,7 @@ class ChatBot:
     def __init__(self, history: List[Dict[str, str]]):
         self.model = genai.GenerativeModel(
             model_name = 'gemini-1.5-flash',
-            #system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
+            system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so. Always think through your answer throughly.",
             generation_config=genai.types.GenerationConfig(
             temperature=0.0,
             ),
