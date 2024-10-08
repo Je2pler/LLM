@@ -1,10 +1,10 @@
 **/secrets.toml
-./__pycache__/
+**/__pycache__/
 **/*.icloud
 **/.DS_Store
 .venv/
 **/*.pdf
-.db/
+.db*/
 .env
 *.tex
 temp/

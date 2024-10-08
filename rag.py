@@ -2,10 +2,10 @@ import streamlit as st
 import google.generativeai as genai
 import chromadb.utils.embedding_functions.google_embedding_function
 import chromadb
-from typing import Callable, List, Dict
+from typing import Callable, List, Dict, Tuple, Generator
 import os
 
-class VectorDatabase2:
+class VectorDatabase:
     GEMENI_EMBEDDING = chromadb.utils.embedding_functions.google_embedding_function.GoogleGenerativeAiEmbeddingFunction(api_key=st.secrets.gemini.api_key)
 
     def __init__(self, collection_name: str,  embedding_function = GEMENI_EMBEDDING):
@@ -17,13 +17,23 @@ class VectorDatabase2:
             raise ValueError(f'Could not find chroma db collection "{collection_name}"')
     
     def query(self, query_str: str) -> List[str]:
-        return self.collection.query(query_texts=[query_str], n_results=10)['documents'][0]
+        return list(zip(
+            [
+                int(id.split(':')[0])-24
+                for id in 
+                self.collection.query(query_texts=[query_str], n_results=4)['ids'][0]
+            ],
+            self.collection.query(query_texts=[query_str], n_results=4)['documents'][0]
+        ))
 
 class ChatBot:
-    def __init__(self, history: List[Dict[str, str]], db: VectorDatabase2):
+    def __init__(self, history: List[Dict[str, str]], db: VectorDatabase):
         self.model = genai.GenerativeModel(
             model_name = 'gemini-1.5-flash',
-            system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so."
+            system_instruction="You are an expert in the machine learning course: advanced probabilistic machine learning. If you are unsure about an answer, say so.",
+            generation_config={
+                'temperature': 0
+            }
         )
         
         self.chat = self.model.start_chat(history=[
@@ -32,35 +42,65 @@ class ChatBot:
                 'parts': message['message']
             }
             for message in history
-        ])
+        ] )
 
         self.db = db
     
-    def __call__(self, prompt: str) -> str:
+    def check_relevance(self, answer: str, context: str) -> bool:
+        response = self.model.generate_content(
+            f'<instruction>Was the following context used to create the following answer? '+
+            f'Answer yes or no. </instruction><context>{context}</context>'+
+            f'<answer>{answer}</answer>'
+        )
+        return 'yes' in response.text.lower()
+    
+    def __call__(self, prompt: str, contexts: List[str], on_complete: Callable[[str], None] = lambda x: None) -> Generator[str, None, None]:
         """
         Generate response to prompt. 
 
         ## Parameters
          - ``prompt`` Prompt for model. 
         """
-        return self.chat.send_message(prompt).text
+        answer = ''
 
-    def generate_prompt(self, question: str) -> str:
-        context = '\n\n'.join(self.db.query(question))
+        for chunk in self.chat.send_message(prompt, stream=True):
+            yield chunk.text
+            answer += chunk.text
+
+        refrences = [
+            f'p{page_nr}'
+            for page_nr, context in contexts
+            if self.check_relevance(answer, context)
+        ]
+
+        if len(refrences) > 0:
+            ref = f'\n**Refrences**: ' + ', '.join(refrences)
+            answer += ref
+            yield ref
+        
+        on_complete(answer)
+
+    def generate_prompt_and_references(self, question: str) -> Tuple[str, Tuple[int, str]]:
+        db_result = self.db.query(question)
+
+        context = '\n\n'.join([
+            f'<course_book>\nPage number: {page_nr}\n\n{segment}\n</course_book>'
+            for page_nr, segment in db_result
+        ])
 
         return f"""
-<instruction>
-Use the context to answer the question. If the answer doesn't exist within the context, say that you don't know the answer. 
+<instruction>\n
+Answer the question and explain it to someone who is unfamilliar with the course. If possible, answer using the course book as context. Otherwise, inform the user that you are not answering using the course book.\n
 </instruction>\n\n
 
-<context>
-{context}
-</context>\n\n
+<course book>\n
+{context}\n
+</course book>\n\n
 
-<question>
-{question}
+<question>\n
+{question}\n
 </question>
-    """
+    """, db_result
 
 def gemini_response_generator(model: genai.GenerativeModel, prompt: str) -> str:
     """
@@ -80,8 +120,11 @@ def draw_page(chat_bot: ChatBot) -> None:
     ## Parameters
      - ``response_generator`` Callback function to generate response. 
     """
+    # Page config
+    st.set_page_config('APML AI Tutor')
+
     # Write title
-    st.header('1RT730 Chatbot')
+    st.header('APML AI Tutor')
 
     st.sidebar.title("Predefinied functions")
     developer_mode = st.sidebar.toggle('Developer Mode')
@@ -97,10 +140,7 @@ def draw_page(chat_bot: ChatBot) -> None:
 
     # Accept user input
     if user_input := st.chat_input('Say something...'):
-        prompt = chat_bot.generate_prompt(user_input)
-        print('**************')
-        print(prompt)
-        print('**************')
+        prompt, refrences = chat_bot.generate_prompt_and_references(user_input)
 
         with st.chat_message('user'):
             if developer_mode:
@@ -115,15 +155,17 @@ def draw_page(chat_bot: ChatBot) -> None:
         })
 
         # Write response
-        response = chat_bot(prompt)
+        response = chat_bot(
+            prompt, 
+            refrences, 
+            lambda response: st.session_state.messages.append({
+                'role': 'ai',
+                'message': response
+            })
+        )
 
         with st.chat_message('ai'):
-            st.write_stream(list(response))
-        
-        st.session_state.messages.append({
-            'role': 'ai',
-            'message': response
-        })
+            st.write_stream(response)
 
 def generate_exam(): 
     pass
@@ -136,11 +178,11 @@ def main() -> None:
     if 'messages' not in st.session_state:
         st.session_state.messages = [{
             'role': 'ai',
-            'message': "Welcome to the 1RT730 Chatbot. How can I help you today?"
+            'message': "What can I teach you today? "
         }]
     
     # Load db
-    db = VectorDatabase2('APML-book')
+    db = VectorDatabase('APML-book')
 
     # Create chatbot
     chat_bot = ChatBot(st.session_state.messages, db)

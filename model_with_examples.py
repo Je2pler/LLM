@@ -2,6 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 import pandas as pd
 import os
+from path_to_training import list_of_exams_path, list_of_exams_name
 
 from typing import Callable, List, Dict
 
@@ -14,13 +15,42 @@ class ChatBot:
             temperature=0.0,
             ),
             )
-        self.chat = self.model.start_chat(history=[
+        
+        if 'examples' not in st.session_state:
+            st.session_state.examples = self.add_examples()
+        
+        history_for_gem = [
             {
                 'role': 'model' if  message['role']=='ai' else message['role'],
                 'parts': message['content']
             }
             for message in history
-        ])
+        ]
+        self.chat = self.model.start_chat(history=st.session_state.examples + history_for_gem)
+    
+    def add_examples(self):
+        qa_pairs = []
+        for exam_path, exam_name in zip(list_of_exams_path, list_of_exams_name):
+            print('Loading question answer pairs for ', exam_name)
+            data = pd.read_csv(exam_path+exam_name,  quotechar='"', delimiter=';', escapechar='\\')
+            for index, row in data.iterrows():
+                question = row['question']
+                answer = row['answer']
+                if row['extra_material']!= "Null":
+                    file_path = row['extra_material']
+                    myfile = genai.upload_file(exam_path+'\\'+file_path)
+                    question = [question, myfile]
+                if '.py' in answer:
+                    with open(f'{exam_path}/{answer}', encoding='utf-8') as file:
+                        code = ''.join(file.readlines())
+                        answer = code
+                elif '.png' in answer:
+                    continue
+                qa_pairs.append({'role': 'user', 'parts': question})
+                qa_pairs.append({'role': 'model', 'parts': answer})
+
+        return qa_pairs
+
     
     def __call__(self, prompt: list) -> str:
         """
