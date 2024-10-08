@@ -1,0 +1,321 @@
+,exam,question_number,sub_question,question_type,extra_material,question,answer,response
+0,5,1,a,Multiple choice,Null,Which of the following machine learning methods that can be used for unsupervised learning? Select one or more alternatives. 1. PCA. 2. Bayesian linear regression. 3. Logistic regression. 4. Random forest. 5. Variational auto-encoder. 6. Clustering,"1. PCA, 5. Variational auto-encoder, 6. Clustering","The correct answers are:
+
+**1. PCA.** PCA is a method for dimensionality reduction, which is a form of unsupervised learning. It aims to find a lower-dimensional representation of the data that captures the most variance.
+
+**5. Variational auto-encoder.** A variational auto-encoder is a generative model that learns a latent representation of the data. This is a form of unsupervised learning, as it does not require labeled data.
+
+**6. Clustering.** Clustering is the task of grouping data points into clusters based on their similarity. This is a form of unsupervised learning, as it does not require labeled data.
+
+The other options are incorrect:
+
+**2. Bayesian linear regression.** This is a method for supervised learning, as it requires labeled data to learn the relationship between the input and output variables.
+
+**3. Logistic regression.** This is also a method for supervised learning, as it requires labeled data to learn the relationship between the input and output variables.
+
+**4. Random forest.** This is a method for supervised learning, as it requires labeled data to learn the relationship between the input and output variables. 
+"
+1,5,2,a,Essay,exam_2022_08_24_2.png,"In this problem we will consider the Bayesian network in the image. Write the factorization of the joint density given by the Bayesian network. $p(A,B,C,D,E)=?$","$p(A,B,C,D,E)=p(A)p(B)p(C|A,B)p(D)p(E|C,D)","The factorization of the joint density given by the Bayesian network is:
+
+$p(A,B,C,D,E) = p(A)p(B)p(C|A,B)p(D)p(E|C,D)$.
+
+This factorization comes directly from the definition of a Bayesian network, which states that the probability of a variable conditioned on its parents is independent of any other variables. In this case, the probability of C is independent of A and D, given A and B. Similarly, the probability of E is independent of A and B, given C and D.
+"
+2,5,2,b,Multiple choice,exam_2022_08_24_2.png,In this problem we will consider the Bayesian network in the image. Is this statement true or false: From the Bayesian network we can conclude that $A \perp \!\!\! \perp B$ (A is independent of B),"True, the path A-C-B is blocked at C (unobserved head-to-head)","The statement is false. While A and B are not directly connected, they have a common child, C. Therefore, A and B are not independent. 
+
+The book states that ""two variables will be independent if they are not linked by a path on the graph"". In this case, while there is no direct link between A and B, they are linked via the path A->C<-B. 
+"
+3,5,2,c,Multiple choice,exam_2022_08_24_2.png,In this problem we will consider the Bayesian network in the image. Is this statement true or false: From the Bayesian network we can conclude that $A \perp \!\!\! \perp E$ (A is independent of E),"False, the path A-C-E is unblocked.","The statement is true. A and E are not directly connected, and there is no path from A to E. Therefore, they are independent. 
+
+Note that this is different from the previous question about A and B. While there is no direct link between A and B, they have a common child (C). This means that there is a path from A to B, which makes them dependent. However, A and E have no such path, which means they are independent. 
+
+
+"
+4,5,2,d,Multiple choice,exam_2022_08_24_2.png,In this problem we will consider the Bayesian network in the image. Is this statement true or false: From the Bayesian network we can conclude that $A \perp \!\!\! \perp B|D$ (A is independent of B given D),"True, the path A-C-B is blocked at C (unobserved head-to-head without observed descendants).","The statement is true. To determine if two variables are independent given a third variable, we need to check if there is any path between the two variables that is not blocked.
+
+In this case, there is no path between A and B that is not blocked given D. The only path from A to B passes through C, and C is a collider on this path. Since D is not a descendant of C, this path is blocked given D.
+
+Since there are no unblocked paths between A and B given D, we can conclude that A and B are independent given D.
+
+Therefore, the statement is true. 
+"
+5,5,2,e,Multiple choice,exam_2022_08_24_2.png,In this problem we will consider the Bayesian network in the image. Is this statement true or false: From the Bayesian network we can conclude that $A \perp \!\!\! \perp B|E$ (A is independent of B given E),"False, the path A-C-B is not blocked at C (unobserved head-to-head but with observed descendants at E).","The statement is **false**. 
+
+To determine if two variables are independent given a third variable, we need to check if there is any path between the two variables that is not blocked. In this case, there is a path from A to B that is not blocked given E. This path is A->C->E<-D->B. 
+
+* A->C->E is not blocked because E is a descendant of C, which is a collider.
+* E<-D->B is not blocked because E is in the conditioning set.
+
+Therefore, A and B are dependent given E. 
+"
+6,5,2,f,Multiple choice,exam_2022_08_24_2.png,In this problem we will consider the Bayesian network in the image. Is this statement true or false: From the Bayesian network we can conclude that $A \perp \!\!\! \perp E|B$ (A is independent of E given B),"False, the path C-B-D-E is unblocked.","The statement is **true**.
+
+To check for conditional independence, we look for any paths between A and E that are not blocked given B. The only path from A to E passes through C. 
+
+* C is a collider on this path, as both A and B point to it.
+* B is in the conditioning set. 
+
+Therefore, the path is blocked, and A and E are independent given B. 
+
+
+"
+7,5,2,g,Multiple choice,exam_2022_08_24_2.png,In this problem we will consider the Bayesian network in the image. Is this statement true or false: From the Bayesian network we can conclude that $A \perp \!\!\! \perp D|E$ (A is independent of D given E),"False, the path C-B-D-E is unblocked.","The statement is **true**. 
+
+To check for conditional independence, we look for any paths between A and D that are not blocked given E. 
+
+- The only path from A to D is A->C->E<-D.
+- C is a collider on this path, and E is a descendant of C. 
+- Therefore, this path is blocked given E.
+
+Since there are no unblocked paths between A and D given E, we can conclude that A and D are independent given E. 
+
+Therefore, the statement is true. 
+"
+8,5,2,h,Multiple choice,exam_2022_08_24_2.png,In this problem we will consider the Bayesian network in the image. Is this statement true or false: From the Bayesian network we can conclude that $A \perp \!\!\! \perp D|B$ (A is independent of D given B),"True, path A-C-E-D blocked at E (unobserved head-to-head)","The statement is **false**.
+
+To determine if two variables are independent given a third variable, we need to check if there is any path between the two variables that is not blocked.
+
+In this case, there is a path from A to D that is not blocked given B: A->C->E<-D<-B. 
+
+* A->C->E is not blocked because E is a descendant of C, which is a collider.
+* E<-D<-B is not blocked because B is in the conditioning set.
+
+Therefore, A and D are dependent given B. 
+
+
+"
+9,5,2,i,Multiple choice,exam_2022_08_24_2.png,"In this problem we will consider the Bayesian network in the image. Is this statement true or false: From the Bayesian network we can conclude that $A \perp \!\!\! \perp D|B,E$ (A is independent of D given B,E)","False, the path C-B-D-E is unblocked.","The statement is **true**.
+
+To determine if A and D are independent given B and E, we need to check if there's any path between A and D that's not blocked given B and E. 
+
+- The only path from A to D is A->C->E<-D<-B.
+- C is a collider on this path, and both B and E are descendants of C. 
+- Therefore, this path is blocked given B and E.
+
+Since there are no unblocked paths between A and D given B and E, we can conclude that A and D are independent given B and E. 
+
+
+"
+10,5,2,j,Diagram,exam_2022_08_24_2.png,"In this problem we will consider the Bayesian network in the image. Suppose we marginalize out the random variable A. Draw resulting Bayesian network of the remaining random variables B,C,D and E.",exam_2022_08_24_2_j.png,"The resulting Bayesian network after marginalizing out A is:
+
+<start_of_image> схема
+
+
+<start_of_image>kringel B
+kringel C
+kringel D
+kringel E
+pil A->C
+pil B->C
+pil C->E
+pil D->E
+
+
+The node A is no longer present in the network since it has been marginalized. The dependence structure of the remaining variables remains unchanged.
+
+"
+11,5,2,k,Diagram,exam_2022_08_24_2.png,"In this problem we will consider the Bayesian network in the image. Suppose we marginalize out the random variable C. Draw resulting Bayesian network of the remaining random variables A, B, D and E.",exam_2022_08_24_2_k.png,"The resulting Bayesian network after marginalizing out C is:
+
+схема
+
+
+kringel A
+kringel B
+kringel D
+kringel E
+pil A->E
+pil B->E
+pil D->E
+
+The node C is no longer present in the network since it has been marginalized. However, its influence remains:
+
+* A now influences E indirectly through the path A->C->E.
+* B still directly influences E.
+* D still directly influences E.
+
+The dependence structure has been adjusted to reflect the new set of variables.
+
+
+
+"
+12,5,3,a,Programming,exam_2022_08_24_3_base.py,"Consider the model $y_i=w_0 + w_1x_i + w_2x_i^2 + \epsilon_i$ where $\epsilon_i \sim N(0,1)$ and the prior of the parameters ia $w_j \sim N(0,1), j=0,1,2$. Assume the following points are observed $x_i: [0.1, 0.5, 1, 1.2, 2, 3]$ and $y_i:[2.2, 2.1, 3.9, 5.3, 9.1, 17.5]$. The posterior distribution of the parameter vector $w=[w_0, w_1, w_2]$ is normally distributed $p(w|D)\sim N(\mu, \Sigma)$ For $D=\{(x_i, y_i)\ i=1, 2, 3, 4, 5, 6\}$ the datapoints. Implement in python a routine to compute the values of $\mu$ and $\Sigma$. Use the base code provided.",exam_2022_08_24_3_ans.py,"```python
+import numpy as np
+import matplotlib.pyplot as plt
+# Generate points
+x = np.array([0.1, 0.5, 1, 1.2, 2, 3])
+y = np.array([2.2, 2.1, 3.9, 5.3, 9.1, 17.5])
+
+# create design matrix
+# -- Question 3a(i) -- 
+phi = np.column_stack((np.ones(len(x)), x, x**2))
+# INSERT YOUR ANSWER HERE
+# --------------------
+
+# compute mean of parameters
+# -- Question 3a(i) -- 
+mu = np.linalg.solve(phi.T @ phi, phi.T @ y)
+# INSERT YOUR ANSWER HERE
+# --------------------
+
+# compute covariance
+# -- Question 3a(i) -- 
+Sigma = np.linalg.inv(phi.T @ phi)
+# INSERT YOUR ANSWER HERE
+# --------------------
+
+print('mu = ', mu)
+print('Sigma = \n', Sigma)
+```"
+13,5,4,a,Essay,exam_2022_08_24_4_base.py,"Consider a one-sided truncated normal distribution; $p(x) = \begin{cases} \frac{1}{F(b)} \mathcal{N}(x; 0, 1) & \text{if } x < b \\ 0 & \text{otherwise} \end{cases}$ where a standard normal distribution (mean =0, variance=1) has been truncated at $x<b$ and where $F(b) = \int_{-\infty}^{b} \mathcal{N}(t; 0,1)dt$. We want to sample from $p(x)$ using an importance sampler. The attached code implements an importance sampler. Which proposal distribution is used in the suggested importance sampler?","In an importance sampler, we draw samples from proposal distribution. This is done in line 13 of the code, which is a normal distribution with mean 0 and variance 1, i.e. $r(x)=\mathcal{N}(x;0,1).","The proposal distribution is $\mathcal{N}(x; 0, 1)$, which is a standard normal distribution. 
+ 
+ The acceptance probability is determined by the ratio of the target distribution to the proposal distribution. In this case, the target distribution is a truncated normal distribution and the proposal distribution is a standard normal distribution. The acceptance probability ensures that samples are accepted or rejected in a way that results in the correct stationary distribution, which in this case is p(x).
+ 
+ The code provided implements the Metropolis-Hastings algorithm to draw samples from p(x), using a normal distribution as the proposal distribution. This approach is known to be effective in many practical settings, although convergence can be slow for some distributions and it is not always easy to determine an appropriate proposal distribution. 
+ 
+ The code begins by defining the target distribution p(x) as a truncated normal distribution. This is a standard distribution in statistics and is often used in various practical applications. 
+ 
+ The next step is to draw L = 1000 samples from a normal distribution with mean 0 and standard deviation 1. These samples are used as the proposal distribution for the Metropolis-Hastings algorithm.
+ 
+ The weights w are then computed based on the ratio of the target distribution to the proposal distribution. These weights are then normalized so that they sum to L. Finally, a weighted histogram is plotted to visualize the distribution of the samples.
+ 
+ This code demonstrates the basic principles of importance sampling and the Metropolis-Hastings algorithm. By using a suitable proposal distribution and acceptance probability, one can effectively sample from a target distribution, even if it is intractable to sample directly from the target distribution. However, it is important to note that the quality of the samples produced by an importance sampler can be dependent on the choice of the proposal distribution and the acceptance probability, and that convergence can be slow for some distributions.  
+ 
+ The user may also wish to try other proposal distributions, such as a uniform distribution, and compare the performance of the importance sampler. In addition, the user may wish to experiment with different values of the acceptance probability to see how this affects the performance of the importance sampler.  The acceptance probability can have a significant effect on the efficiency of the sampler and the quality of the samples produced. The user should also be aware of the potential for convergence issues, particularly when sampling from high-dimensional distributions, and take appropriate steps to ensure convergence."
+14,5,4,b,Essay,exam_2022_08_24_4_base.py,"Consider a one-sided truncated normal distribution; $p(x) = \begin{cases} \frac{1}{F(b)} \mathcal{N}(x; 0, 1) & \text{if } x < b \\ 0 & \text{otherwise} \end{cases}$ where a standard normal distribution (mean =0, variance=1) has been truncated at $x<b$ and where $F(b) = \int_{-\infty}^{b} \mathcal{N}(t; 0,1)dt$. We want to sample from $p(x)$ using an importance sampler. The attached code implements an importance sampler. Motivate line 13-14 describing the computation of the weights based on how an importance sampler works and our particular choice of proposal distribution.","In an importance sampler the weights are calculated by computing $w_i=\frac{\pi(x_i)}{r(x)}$ where $\pi(x)$ is the (possibly unnormalized) target distribution. With $\pi(x)=\mathcal{N}(x;0,1)\delta(x<b)$ we get $w_i = \frac{\mathcal{N}(x;0,1)\delta(x<b)}{\mathcal{N}(x;0,1)}=\delta(x<b)$ i.e weights will be 1 if $x<b$ and 0 otherwise. The normalization in line 15 will make sure the weights are correctly normalized.","The code implements importance sampling using a standard normal distribution as the proposal distribution. Importance sampling works by drawing samples from a simpler proposal distribution q(x) and then re-weighting these samples to approximate the target distribution p(x). The weights are computed as the ratio of the target distribution to the proposal distribution, that is, w = p(x)/q(x).
+
+In this case, the target distribution is a truncated normal distribution p(x) and the proposal distribution is a standard normal distribution q(x) = N(x; 0, 1), which is implemented in line 12. The weights are then computed in line 13 as:
+
+```python
+w = (x < b) # compute weights
+```
+
+This line of code checks which of the samples drawn from the proposal distribution are less than b, and sets the corresponding weight to 1 and the rest to 0. This is because for samples x that are less than b, the probability p(x) of the truncated normal distribution is non-zero, while for samples x that are greater than b, the probability is zero. Hence, we only need to re-weight the samples that are less than b.
+
+The weights are then normalized in line 14:
+
+```python
+w = w/np.sum(w)*L # normalize weights
+```
+This step ensures that the sum of the weights is equal to the total number of samples L. This is important for the correctness of the importance sampling algorithm.
+
+Therefore, in lines 13-14, the code correctly computes the weights for the importance sampler based on the chosen proposal distribution and the target distribution.
+
+In general, the weights in importance sampling can be used to approximate the expected value of a function f(x) with respect to the target distribution p(x) as follows:
+
+$$E[f(x)] \approx \sum_{l=1}^{L} f(x_l) w_l$$
+
+where w_l is the weight of the l-th sample x_l drawn from the proposal distribution q(x).
+
+The quality of the importance sampler approximation depends on the choice of the proposal distribution and the acceptance probability. In this example, the proposal distribution is a standard normal distribution, which is a relatively simple distribution to sample from. The acceptance probability is determined by the ratio of the target distribution to the proposal distribution, which in this case is always 1 for samples that are less than b. This means that all samples that are less than b are accepted. As a result, the importance sampler is expected to perform well in this case.
+
+However, it is important to note that the choice of the proposal distribution and acceptance probability can have a significant impact on the efficiency of the importance sampler and the quality of the samples produced. In some cases, it may be difficult to find a suitable proposal distribution, or the acceptance probability may be very low. In these cases, it may be necessary to use more advanced sampling techniques, such as Markov Chain Monte Carlo (MCMC) methods, to draw samples from the target distribution.
+
+"
+15,5,4,c,Essay,exam_2022_08_24_4_base.py,"Consider a one-sided truncated normal distribution; $p(x) = \begin{cases} \frac{1}{F(b)} \mathcal{N}(x; 0, 1) & \text{if } x < b \\ 0 & \text{otherwise} \end{cases}$ where a standard normal distribution (mean =0, variance=1) has been truncated at $x<b$ and where $F(b) = \int_{-\infty}^{b} \mathcal{N}(t; 0,1)dt$. We want to sample from $p(x)$ using an importance sampler. The attached code implements an importance sampler. Consider a different target function by changing the truncation threshold in line 7 to $b=-4$. Explain why the importance sampler now performs poorly and suggest how it can be improved (without using more samples).","With b = −4 virtually all weights will be zero. This is because $r(x)$ is very small where $\pi(xi) 6=0$. This can be improved by modifying the proposal to have its probability mass where the targets distribution has its probability mass, for example by shifting the mean of the Gaussian proposal to -4. In the code below we adjust the proposal further to mean -4.25 and standard deviation 0.25. ","The code provided implements importance sampling, which draws samples from a simpler proposal distribution q(x) and then reweights these samples to approximate the target distribution p(x).  The weights are computed as the ratio of the target distribution to the proposal distribution, that is, w = p(x)/q(x).
+
+In the original code, the target distribution is a truncated normal distribution with the truncation point at b = 0. This means that the target distribution is non-zero only for x values less than 0, and zero for x values greater than 0. The proposal distribution used in the code is a standard normal distribution, which is non-zero for all x values. As a result, the weights computed for samples that are greater than 0 are extremely small, since the target distribution is zero for these samples. This makes the importance sampler perform poorly, as it effectively ignores the samples that are greater than 0, leading to an inaccurate approximation of the target distribution.
+
+When the truncation threshold b is changed to -4, the target distribution is non-zero for x values less than -4, and zero otherwise. As a result, the importance sampler now effectively ignores all samples that are greater than -4, since the target distribution is zero for these samples. This leads to an even worse approximation of the target distribution, as now the importance sampler is ignoring even more samples.
+
+To improve the performance of the importance sampler without using more samples, one can choose a more suitable proposal distribution that better reflects the target distribution.  Since the target distribution is a truncated normal distribution, a reasonable choice for the proposal distribution would be a truncated normal distribution with the same mean and standard deviation as the target distribution, but truncated at a different point. For example, we could use a truncated normal distribution with mean 0 and standard deviation 1, truncated at -4. This would mean that the proposal distribution is non-zero for x values less than -4, and zero otherwise, which is the same as the target distribution. 
+
+Using a truncated normal distribution as the proposal distribution would result in better weights and a more accurate approximation of the target distribution, since it would take into account the entire range of the target distribution. This will lead to more accurate estimates of the expected value of a function f(x) with respect to the target distribution.
+
+Here is an example of how to modify the code to use a truncated normal distribution as the proposal distribution:
+
+```python
+import numpy as np
+from scipy.stats import norm, truncnorm, uniform
+import matplotlib.pyplot as plt
+
+# target distribution
+a = -np.inf
+b = -4
+def p(x):
+    return truncnorm.pdf(x,a,b,loc=0,scale=1)
+
+L = 1000 # number of samples
+x = truncnorm.rvs(a,b,loc=0,scale=1,size=L) #draw samples from the truncated normal proposal distribution
+w = (x < b) # compute weights
+w = w/np.sum(w)*L # normalize weights
+
+# plot a weighted histogram
+plt.hist(x,weights=w,bins=50,density=True)
+
+# plot the target distribution and the samples
+xv = np.linspace(-8,8,100)
+plt.plot(xv,p(xv))
+plt.show()
+```
+
+This code now uses a truncated normal distribution as the proposal distribution, which is more appropriate for the target distribution and results in a better approximation of the target distribution.
+
+In addition to changing the proposal distribution, one can also try to use different acceptance probabilities to improve the performance of the importance sampler. However, choosing an appropriate acceptance probability can be tricky and requires some experimentation.  
+
+Overall, it is important to be aware of the limitations of importance sampling and to choose a proposal distribution and acceptance probability that are appropriate for the target distribution.  For complex distributions, it may be necessary to use more advanced sampling techniques, such as MCMC methods, to draw samples from the target distribution.
+
+"
+16,5,4,d,Programming,exam_2022_08_24_4_base.py,"Consider a one-sided truncated normal distribution; $p(x) = \begin{cases} \frac{1}{F(b)} \mathcal{N}(x; 0, 1) & \text{if } x < b \\ 0 & \text{otherwise} \end{cases}$ where a standard normal distribution (mean =0, variance=1) has been truncated at $x<b$ and where $F(b) = \int_{-\infty}^{b} \mathcal{N}(t; 0,1)dt$. We want to sample from $p(x)$ using an importance sampler. The attached code implements an importance sampler. Consider a different target function by changing the truncation threshold in line 7 to $b=-4$. The sampler will now perform poorly. Implement improvements to the sampler. Draw $L=1000$ samples. Plot your estimate of the target distribution using a histogram of the weighted samples. Use 50 bins in your histogram. Also plot the exact target distriubtion in the same plot.",exam_2022_08_24_4_ans.py,"```python
+import numpy as np
+from scipy.stats import norm, truncnorm, uniform
+import matplotlib.pyplot as plt
+
+# target distribution
+a = -np.inf
+b = -4 # new truncation threshold
+def p(x):
+    return truncnorm.pdf(x,a,b,loc=0,scale=1)
+
+L = 1000 # number of samples
+x = norm.rvs(loc=0,scale=1,size=L) #draw samples
+w = (x < b) # compute weights
+w = w/np.sum(w)*L # normalize weights
+
+# plot a weighted histogram
+plt.hist(x,weights=w,bins=50,density=True)
+
+# plot the target distribution and the samples
+xv = np.linspace(-8,8,100)
+plt.plot(xv,p(xv))
+plt.show()
+```
+The main issue with the importance sampler is that the importance distribution (standard normal) is not a good match for the target distribution. This means that the importance weights are very variable, leading to poor estimates. We can improve the sampler by using a proposal distribution that is closer to the target distribution. For example, we could use a truncated normal distribution with the same mean and variance as the target distribution. This will make the importance weights more uniform and improve the accuracy of the sampler. This method is not fully optimal because the proposal distribution is not guaranteed to have higher probability density than the target distribution. In high dimensions, it is therefore often necessary to use alternative sampling methods, such as the Metropolis-Hastings sampler, that allow for non-local jumps in the sample space.  The code below shows an improvement using a truncated normal distribution as the proposal. 
+
+```python
+import numpy as np
+from scipy.stats import norm, truncnorm, uniform
+import matplotlib.pyplot as plt
+
+# target distribution
+a = -np.inf
+b = -4 # new truncation threshold
+def p(x):
+    return truncnorm.pdf(x,a,b,loc=0,scale=1)
+
+L = 1000 # number of samples
+x = truncnorm.rvs(a, b, loc=0, scale=1, size=L) # draw samples from proposal distribution
+w = (x < b) # compute weights
+w = w/np.sum(w)*L # normalize weights
+
+# plot a weighted histogram
+plt.hist(x,weights=w,bins=50,density=True)
+
+# plot the target distribution and the samples
+xv = np.linspace(-8,8,100)
+plt.plot(xv,p(xv))
+plt.show()
+```"
+17,5,4,e,Multiple choice,Null,Which of the following statements are true for the Gibbs sampler. 1. We need to be able to sample from all conditional distributions of the target distribution. 2. We need to be able to evaluate the target distriubtion up to a proportional constant. 3. We need to discard the samples during the so called burn in period. 4. The samples need to be weighted.,Alternative 1 and 3. are correct for the Gibbs sampler.,"The correct answers are:
+
+- **1. We need to be able to sample from all conditional distributions of the target distribution.** This is true because the Gibbs sampler works by sampling from the conditional distribution of each variable, given the values of all other variables. This requires that we are able to sample from all conditional distributions of the target distribution.
+
+- **2. We need to be able to evaluate the target distribution up to a proportional constant.** This is also true because the Gibbs sampler uses the target distribution to calculate the probability of each state, and this probability is only required up to a proportional constant.
+
+The incorrect answers are:
+
+- **3. We need to discard the samples during the so called burn in period.** This is not necessarily true. While a burn-in period is often used in MCMC sampling to discard samples from the early iterations of the chain, this is not strictly required for Gibbs sampling. 
+
+- **4. The samples need to be weighted.** This is not true. Gibbs sampling does not require the samples to be weighted. The samples are drawn from the conditional distributions of the target distribution, and the weights are implicitly included in these distributions.
+
+In summary, the Gibbs sampler requires that we are able to sample from all conditional distributions of the target distribution and to evaluate the target distribution up to a proportional constant. It is not necessary to discard the samples during the burn-in period, and the samples do not need to be weighted. 
+"

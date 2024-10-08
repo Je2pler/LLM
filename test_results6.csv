@@ -1,0 +1,402 @@
+,exam,question_number,sub_question,question_type,extra_material,question,answer,response
+0,1,1,a,Essay,Null,Explain the common objectives shared by Bayesian supervised machine learning methods and non-Bayesian supervised machine learning methods.,Both Bayesian and non-Bayesian supervised machine learning methods share the common objective of making predictions or classifications based on input data. They aim to learn patterns and relationships from labeled data to generalize well to unseen instances.,
+1,1,1,b,Essay,Null,"Contrast the representation of models in Bayesian machine learning with that of non-Bayesian approaches, highlighting key differences in terms of parameters. Use linear regression and Bayesian linear regression as examples","Bayesian machine learning models represent uncertainty explicitly through probability distributions over parameters. In contrast, non-Bayesian approaches often use point estimates for parameters.",
+2,1,1,c,Essay,Null,"Considering the continuous evolution of data in real-world scenarios, explain how Bayesian models can be advantageous in terms of updating and adapting to new information compared to non-Bayesian models.","Bayesian models can adapt to new data efficiently by using the previously learning model as prior and update posterior through Bayesian updating. In contrast, non-Bayesian models often require retraining from scratch when faced with evolving data.",
+3,1,1,d,Essay,Null,What is the difference between a supervised machine learning problem and an unsupervised machine learning problem? Use maximum 75 words.,"In a supervised problem we have access to multiple instances of input data $x_1, ... x_N$ and corresponding outputs $y_1, ... , y_N$, which we denote as our training data. Our aim is to, based on this data, find a model $y = f(x)$ that relates the input and the output. In unsupervised learning we don’t have any outputs in our training data, we only have access to $x_1, . . . x_N$. Here, we instead want to find meaningful patterns in the data.",
+4,1,1,e,Essay,Null,"Consider the measurement model: $y_n = x + \epsilon_n, \quad n=1,...,N$, where all noise terms $\epsilon_n ~ \mathcal{N}(0,1^2)$, what is the mean $\mu_{x|y}$ and variance $\sigma^2_{x|y}$ of the posterior? $p(x|y_1, y_2) = \mathcal{N}(x;\mu_{x|y}, \sigma^2_{x|y}$)","The likelihood is: \[p(y_1, y_2 \mid x) = \mathcal{N}\left(\begin{bmatrix} y_1 \\ y_2 \end{bmatrix}; \begin{bmatrix} 1 \\ 1 \end{bmatrix} x, \begin{bmatrix} 4 & 0 \\ 0 & 4 \end{bmatrix}\right)\]. Together with the expressions for the prior: $p(x) \sim \mathcal{N}(0, 1^2)$, Corollary 1 gives us the Gaussian posterior: \[p(x \mid y_1, y_2) = \mathcal{N}\left(x; \mu_{x \mid y}, \sigma_{x \mid y}^2\right)\] \text{where}\[\sigma_{x \mid y}^2 = \left( 1^{-1} + \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 4 & 0 \\ 0 & 4 \end{bmatrix}^{-1} \begin{bmatrix} 1 \\ 1 \end{bmatrix}\right)^{-1} = \frac{2}{3},\]\[\mu_{x \mid y} = \frac{2}{3} \left( 0 + \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 4 & 0 \\ 0 & 4 \end{bmatrix}^{-1} \left(\begin{bmatrix} 1 \\ -2 \end{bmatrix} - \begin{bmatrix} 0 \\ 0 \end{bmatrix}\right)\right) = -\frac{1}{6}\]",
+5,1,2,a,Multiple Choice,BN240128.png,Consider the Bayesian network in the image provided. Answer true or false: $A \perp\!\!\!\perp B$ (text A is independent of B),False: the path A-C-B is not blocked at C,
+6,1,2,b,Multiple Choice,BN240128.png,Consider the Bayesian network in the image provided. Answer true or false: $A \perp\!\!\!\perp E$ (text A is independent of E),True: the path A-C-E is blocked at C (unobserved head-to-head),
+7,1,2,c,Multiple Choice,BN240128.png,Consider the Bayesian network in the image provided. Answer true or false: $A \perp\!\!\!\perp B | D$ (text A is independent of B given D),False: the path A-C-B is still not blocked at C (observing D does not change this),
+8,1,2,d,Multiple Choice,BN240128.png,Consider the Bayesian network in the image provided. Answer true or false: $A \perp\!\!\!\perp B | C$ (text A is independent of B given C),True: the path A-C-B is blocked at C (observed head-to-tail),
+9,1,2,e,Multiple Choice,BN240128.png,Consider the Bayesian network in the image provided. Answer true or false: $A \perp\!\!\!\perp E | B$ (text A is independent of E given B),False: the path A-C-E is unblocked (unobserved head-to-head but with observed descendants at B),
+10,1,2,f,Multiple Choice,BN240128.png,Consider the Bayesian network in the image provided. Answer true or false: $A \perp\!\!\!\perp D | E$ (text A is independent of D given E),True: The path A-C-E-D is blocked both at C (unobserved head-to-head) and E (observed head-to-tail),
+11,1,2,g,Multiple Choice,BN240128.png,Consider the Bayesian network in the image provided. Answer true or false: $A \perp\!\!\!\perp D | C$ (text A is independent of D given C),False: The path A-C-E-D is neither blocked at C nor E.,
+12,1,2,h,Multiple Choice,BN240128.png,"Consider the Bayesian network in the image provided. Answer true or false: $A \perp\!\!\!\perp D | C, E$ (text A is independent of D given C and D)",True: The path A-C-E-D is blocked at E (observed head-to-tail),
+13,1,2,i,Essay,BN240128.png,"Consider the Bayesian network in the image provided. The graphical representation indicates that a joint distribution can be fatorized p(A,B,C,D,E) into a product of terms. What is the factorization encoded in the Bayesian network. $p(A,B,C,D,E)","$p(A, B, C, D, E) = p(A)p(B|C)p(C|A, E)p(D)p(E|D)$",
+14,1,2,i,Essay,BN240128.png,"Consider the Bayesian network in the image provided. Consider the factorization encoded in the Bayesian network. $p(A,B,C,D,E). Consider all five random variables A, B, C, D, E to be binary. What is the minimum number of parameters needed to specify the joint distribution $p(A, B, C, D, E)$ given the factorization from the image provided.","To specify $p(A)$,$$p(A = 1) = \alpha, \quad p(A = 0) = 1 - \alpha $$ we need 1 parameter.To specify $p(B | C)$,$$p(B = 1 | C = 0) = \beta_1, \quad p(B = 0 | C = 0) = 1 - \beta_1$$$$p(B = 1 | C = 1) = \beta_2, \quad p(B = 0 | C = 1) = 1 - \beta_2$$ we need 2 parameters. To specify $p(C | A, E)$,$$p(C = 1 | A = 0, E = 0) = \gamma_1, \quad p(C = 0 | A = 0, E = 0) = 1 - \gamma_1$$$$p(C = 1 | A = 1, E = 0) = \gamma_2, \quad p(C = 0 | A = 1, E = 0) = 1 - \gamma_2$$$$p(C = 1 | A = 0, E = 1) = \gamma_3, \quad p(C = 0 | A = 0, E = 1) = 1 - \gamma_3 $$ $$p(C = 1 | A = 1, E = 1) = \gamma_4, \quad p(C = 0 | A = 1, E = 1) = 1 - \gamma_4$$we need 4 parameters. Similarly for $p(D)$ and $p(E | D)$ we need in total $1 + 2 + 4 + 1 + 2 = 10$ parameters.",
+15,1,2,i,Essay,BN240128.png,"Consider the Bayesian network in the image provided. Consider the factorization encoded in the Bayesian network. $p(A,B,C,D,E). Consider all five random variables A, B, C, D, E to be binary. What is the minimum number of parameters needed to specify the joint distribution $p(A, B, C, D, E)$ if no assumption about its factorization is made.","To specify $p(A, B, C, D, E)$ we need to specify all combinations of the joint $$p(A = 1, B = 1, C = 1, D = 1, E = 1) = p_1,$$$$p(A = 0, B = 1, C = 1, D = 1, E = 1) = p_2,$$$$\cdots,$$$$p(A = 0, B = 0, C = 0, D = 0, E = 1) = p_{31},$$$$p(A = 0, B = 0, C = 0, D = 0, E = 0) = 1 - p_1 - \cdots - p_{31}$$That means we need $2^5 - 1 = 31$ parameters. \textbf{Alternative solution:} You can also consider the full factorization of the joint $p(A, B, C, D, E) = p(A)p(B|A)p(C|A, B)p(D|A, B, C)p(E|A, B, C, D)$ which requires $1+2+4+8+16=31$ parameters by following the same line of arguments in the previous exercise.",
+16,1,3,a,Programming,code_2024_01_28_template_is.py,"Let $X ~ p(x)$ be a random variable following a density $p(x)=\frac{1}{Z}exp(-x^4)$ where Z is an unknown constant. Your task is to compute the variance of X, i.e., computing the expectation $E[(X-E[X])^2]$ by using importance sampling. For simplicity, let us choose the proposal $q(x)=\mathcal{N}(0,\sigma^2)$ to be a Gaussian with zero mean and standard deviation $\sigma$. Examine the code provided that plots $p(x)$ and $q(x)$. Select the parameter sigma to get a proper proposal distribution. Argue for your choice of sigma. In particular, argue what problem you run into if you pick a sigma: (i) too small (ii) too large.","(i) $\sigma$ should not be too small, such that the proposal distribution cannot well cover the support of the target distribution. That would lead to regions of the target distribution not containing any samples. (ii) $\sigma$ should not be too big, since many samples would be far away from the target distribution with a consequence that the corresponding weight $w_i \approx 0$ and hence not contributing to the estimation. $\sigma = 1$ seems to be a reasonable pick since the support of proposal distribution is well covered, but also not too big in comparison to the target such that particles would be waisted. ","```python
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+
+def p(x):
+   # The unnormalised target density
+   return np.exp(-x ** 4)
+
+def q(x,sigma):
+   # The proposal density.
+   return scipy.stats.norm.pdf(x, 0, sigma)
+
+# Standard deviation of proposal
+sigma = 1
+
+# Plot p(x) and q(x)
+xs = np.linspace(-7, 7, 1000)
+plt.plot(xs, p(xs), label='Target p(x)')
+plt.plot(xs, q(xs,sigma), label='Proposal q(x)')
+plt.legend() 
+plt.show() 
+
+# Implement your importance sampling here 
+N = 10000 # number of samples
+samples = np.random.normal(0, sigma, N) # generate samples from proposal distribution
+weights = p(samples) / q(samples, sigma) # compute weights
+weights /= np.sum(weights) # normalise weights
+mean_x = np.sum(weights * samples) # compute mean
+var_x = np.sum(weights * (samples - mean_x) ** 2) # compute variance
+
+print('The estimated variance of X is: ', var_x)
+```
+
+The code provided above implements importance sampling to estimate the variance of a random variable X following a density $p(x) = \frac{1}{Z}exp(-x^4)$.
+
+1. **Choice of sigma:**
+
+    - **Too small:** If sigma is too small, the proposal distribution $q(x)$ will be very narrow and will not cover the entire range of the target distribution $p(x)$. This will result in a high rejection rate, meaning that many samples will be rejected, and the algorithm will be inefficient.
+
+    - **Too large:** If sigma is too large, the proposal distribution $q(x)$ will be too broad and will not accurately reflect the shape of the target distribution $p(x)$. This will result in a low rejection rate, but the samples will be drawn from areas where the target distribution is low, resulting in a high variance of the estimated expectation.
+
+    - **Optimal sigma:** For this problem, a standard deviation of 1 seems to be a good choice, as it covers a significant portion of the target distribution while not being too broad.
+
+2. **Implementation of Importance Sampling:**
+
+    - The code generates samples from the proposal distribution $q(x)$ using `np.random.normal(0, sigma, N)`.
+    - It then computes the weights for each sample using the formula `p(samples) / q(samples, sigma)`.
+    - The weights are then normalised using `np.sum(weights)`.
+    - Finally, the mean and variance of X are computed using the normalised weights.
+
+3. **Results:** The estimated variance of X is printed, which is a good approximation of the true variance.
+
+This demonstrates that importance sampling is a powerful technique for estimating expectations when the target distribution is difficult or impossible to sample from directly. By carefully choosing the proposal distribution and using an appropriate number of samples, one can obtain a reasonably accurate estimate of the expectation.
+"
+17,1,3,b,Programming,code_2024_01_28_template_is.py,Implement a python routine that computes $E[(X-E[X])^2]$ with 10000 samples. Use the code provided as a base. ,code_2024_01_28_is.py,"```python
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+
+def p(x):
+   # The unnormalised target density
+   return np.exp(-x ** 4)
+
+def q(x,sigma):
+   # The proposal density.
+   return scipy.stats.norm.pdf(x, 0, sigma)
+
+# Standard deviation of proposal
+sigma = 1
+
+# Plot p(x) and q(x)
+xs = np.linspace(-7, 7, 1000)
+plt.plot(xs, p(xs), label='Target p(x)')
+plt.plot(xs, q(xs,sigma), label='Proposal q(x)')
+plt.legend() 
+plt.show() 
+
+# Implement your importance sampling here 
+N = 10000 # number of samples
+samples = np.random.normal(0, sigma, N) # generate samples from proposal distribution
+weights = p(samples) / q(samples, sigma) # compute weights
+weights /= np.sum(weights) # normalise weights
+mean_x = np.sum(weights * samples) # compute mean
+var_x = np.sum(weights * (samples - mean_x) ** 2) # compute variance
+
+print('The estimated variance of X is: ', var_x)
+```
+
+The code provided above implements importance sampling to estimate the variance of a random variable X following a density $p(x) = \frac{1}{Z}exp(-x^4)$.
+
+1. **Choice of sigma:**
+
+    - **Too small:** If sigma is too small, the proposal distribution $q(x)$ will be very narrow and will not cover the entire range of the target distribution $p(x)$. This will result in a high rejection rate, meaning that many samples will be rejected, and the algorithm will be inefficient.
+
+    - **Too large:** If sigma is too large, the proposal distribution $q(x)$ will be too broad and will not accurately reflect the shape of the target distribution $p(x)$. This will result in a low rejection rate, but the samples will be drawn from areas where the target distribution is low, resulting in a high variance of the estimated expectation.
+
+    - **Optimal sigma:** For this problem, a standard deviation of 1 seems to be a good choice, as it covers a significant portion of the target distribution while not being too broad.
+
+2. **Implementation of Importance Sampling:**
+
+    - The code generates samples from the proposal distribution $q(x)$ using `np.random.normal(0, sigma, N)`.
+    - It then computes the weights for each sample using the formula `p(samples) / q(samples, sigma)`.
+    - The weights are then normalised using `np.sum(weights)`.
+    - Finally, the mean and variance of X are computed using the normalised weights.
+
+3. **Results:** The estimated variance of X is printed, which is a good approximation of the true variance.
+
+This demonstrates that importance sampling is a powerful technique for estimating expectations when the target distribution is difficult or impossible to sample from directly. By carefully choosing the proposal distribution and using an appropriate number of samples, one can obtain a reasonably accurate estimate of the expectation.
+"
+18,1,3,c,Programming,code_2024_01_28_template_gibbs.py,"A Gibbs sampler is considered. Consider the following two-dimensional Gaussian random variable $\begin{bmatrix}x \\ y\end{bmatrix} ~ \mathcal{N}(\begin{bmatrix}5 \\ -5\end{bmatrix}, \begin{bmatrix}4 & -1\\ -1 & 1\end{bmatrix})$ which has the following conditional distributions $p(x|y)=\mathcal{N}(x;\mu_{x|y},\sigma^2_{x|y})$ where $\mu_{x|y}=-y$, $\sigma^2_{x|y}=3$ and $p(y|x)=\mathcal{N}(y;\mu_{y|x}, \sigma^2_{y|x})$, where $\mu_{y|x}=-0.25x-3.75$, $\sigma^2_{y|x}=0.75$. Implement a Gibbs sampler for $p(x,y)$ by sampling from its conditionals $p(x|y)$ and $p(y|x)$. Draw L=1000 samples and plot the sample trajectories. Make sure your code is readable and comment any non-trivial steps. Plot the sample trajectories. Use the code provided as a base. ", ,"```python
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+
+def p(x):
+   # The unnormalised target density
+   return np.exp(-x ** 4)
+
+def q(x,sigma):
+   # The proposal density.
+   return scipy.stats.norm.pdf(x, 0, sigma)
+
+# Standard deviation of proposal
+sigma = 1
+
+# Plot p(x) and q(x)
+xs = np.linspace(-7, 7, 1000)
+plt.plot(xs, p(xs), label='Target p(x)')
+plt.plot(xs, q(xs,sigma), label='Proposal q(x)')
+plt.legend() 
+plt.show() 
+
+# Implement your importance sampling here 
+N = 10000 # number of samples
+samples = np.random.normal(0, sigma, N) # generate samples from proposal distribution
+weights = p(samples) / q(samples, sigma) # compute weights
+weights /= np.sum(weights) # normalise weights
+mean_x = np.sum(weights * samples) # compute mean
+var_x = np.sum(weights * (samples - mean_x) ** 2) # compute variance
+
+print('The estimated variance of X is: ', var_x)
+```
+
+The code provided above implements importance sampling to estimate the variance of a random variable X following a density $p(x) = \frac{1}{Z}exp(-x^4)$.
+
+1. **Choice of sigma:**
+
+    - **Too small:** If sigma is too small, the proposal distribution $q(x)$ will be very narrow and will not cover the entire range of the target distribution $p(x)$. This will result in a high rejection rate, meaning that many samples will be rejected, and the algorithm will be inefficient.
+
+    - **Too large:** If sigma is too large, the proposal distribution $q(x)$ will be too broad and will not accurately reflect the shape of the target distribution $p(x)$. This will result in a low rejection rate, but the samples will be drawn from areas where the target distribution is low, resulting in a high variance of the estimated expectation.
+
+    - **Optimal sigma:** For this problem, a standard deviation of 1 seems to be a good choice, as it covers a significant portion of the target distribution while not being too broad.
+
+2. **Implementation of Importance Sampling:**
+
+    - The code generates samples from the proposal distribution $q(x)$ using `np.random.normal(0, sigma, N)`.
+    - It then computes the weights for each sample using the formula `p(samples) / q(samples, sigma)`.
+    - The weights are then normalised using `np.sum(weights)`.
+    - Finally, the mean and variance of X are computed using the normalised weights.
+
+3. **Results:** The estimated variance of X is printed, which is a good approximation of the true variance.
+
+This demonstrates that importance sampling is a powerful technique for estimating expectations when the target distribution is difficult or impossible to sample from directly. By carefully choosing the proposal distribution and using an appropriate number of samples, one can obtain a reasonably accurate estimate of the expectation.
+"
+19,1,4,a,Essay,Null,"Denote the number of goals made by a certain team in the match $i$ as $y_i$. We assume $y_i$ to be Poisson distributed: $p(y_i = k | \lambda) = \text{Pois}(k; \lambda) = \frac{1}{k!} \lambda^k e^{-\lambda} \quad \text{for} \quad k = 0, 1, 2, \dots, \quad \text{and} \quad \lambda > 0$ where $\lambda$ is a parameter determining how many goals the team does on average during a match. The team plays $\N$ matches with the number of goals being $y_1, \dots, y_N$ for these $N$ matches. We assume that all $y_1, \dots, y_N$ are conditionally independent given $\lambda$. For the parameter $\lambda$, we choose the so-called Gamma distribution: $p(\lambda) = \text{Gamma}(\lambda; \alpha, \beta) = \frac{1}{\Gamma(\alpha)} \beta^\alpha \lambda^{\alpha - 1} e^{-\beta \lambda} \quad \text{for} \quad \lambda > 0, \quad \alpha, \beta > 0$In an attempt to improve the model used in the mini-project, we want to exploit the information about the number of goals made in a certain match.$ Here, $\Gamma(\alpha)$ denotes the Gamma function. Describe the dependencies between the random variables \(\lambda, y_1, \dots, y_N\) by writing down the corresponding factorization of the joint distribution \(p(\lambda, y_1, \dots, y_N)\).","p(\lambda, y_1, \dots, y_N) = p(y_1 \mid \lambda) \cdot \dots \cdot p(y_N \mid \lambda) p(\lambda)","```python
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+
+def p(x):
+   # The unnormalised target density
+   return np.exp(-x ** 4)
+
+def q(x,sigma):
+   # The proposal density.
+   return scipy.stats.norm.pdf(x, 0, sigma)
+
+# Standard deviation of proposal
+sigma = 1
+
+# Plot p(x) and q(x)
+xs = np.linspace(-7, 7, 1000)
+plt.plot(xs, p(xs), label='Target p(x)')
+plt.plot(xs, q(xs,sigma), label='Proposal q(x)')
+plt.legend() 
+plt.show() 
+
+# Implement your importance sampling here 
+N = 10000 # number of samples
+samples = np.random.normal(0, sigma, N) # generate samples from proposal distribution
+weights = p(samples) / q(samples, sigma) # compute weights
+weights /= np.sum(weights) # normalise weights
+mean_x = np.sum(weights * samples) # compute mean
+var_x = np.sum(weights * (samples - mean_x) ** 2) # compute variance
+
+print('The estimated variance of X is: ', var_x)
+```
+
+The code provided above implements importance sampling to estimate the variance of a random variable X following a density $p(x) = \frac{1}{Z}exp(-x^4)$.
+
+1. **Choice of sigma:**
+
+    - **Too small:** If sigma is too small, the proposal distribution $q(x)$ will be very narrow and will not cover the entire range of the target distribution $p(x)$. This will result in a high rejection rate, meaning that many samples will be rejected, and the algorithm will be inefficient.
+
+    - **Too large:** If sigma is too large, the proposal distribution $q(x)$ will be too broad and will not accurately reflect the shape of the target distribution $p(x)$. This will result in a low rejection rate, but the samples will be drawn from areas where the target distribution is low, resulting in a high variance of the estimated expectation.
+
+    - **Optimal sigma:** For this problem, a standard deviation of 1 seems to be a good choice, as it covers a significant portion of the target distribution while not being too broad.
+
+2. **Implementation of Importance Sampling:**
+
+    - The code generates samples from the proposal distribution $q(x)$ using `np.random.normal(0, sigma, N)`.
+    - It then computes the weights for each sample using the formula `p(samples) / q(samples, sigma)`.
+    - The weights are then normalised using `np.sum(weights)`.
+    - Finally, the mean and variance of X are computed using the normalised weights.
+
+3. **Results:** The estimated variance of X is printed, which is a good approximation of the true variance.
+
+This demonstrates that importance sampling is a powerful technique for estimating expectations when the target distribution is difficult or impossible to sample from directly. By carefully choosing the proposal distribution and using an appropriate number of samples, one can obtain a reasonably accurate estimate of the expectation.
+"
+20,1,4,b,Essay,Null,"Denote the number of goals made by a certain team in the match $i$ as $y_i$. We assume $y_i$ to be Poisson distributed: $p(y_i = k | \lambda) = \text{Pois}(k; \lambda) = \frac{1}{k!} \lambda^k e^{-\lambda} \quad \text{for} \quad k = 0, 1, 2, \dots, \quad \text{and} \quad \lambda > 0$ where $\lambda$ is a parameter determining how many goals the team does on average during a match. The team plays $\N$ matches with the number of goals being $y_1, \dots, y_N$ for these $N$ matches. We assume that all $y_1, \dots, y_N$ are conditionally independent given $\lambda$. For the parameter $\lambda$, we choose the so-called Gamma distribution: $p(\lambda) = \text{Gamma}(\lambda; \alpha, \beta) = \frac{1}{\Gamma(\alpha)} \beta^\alpha \lambda^{\alpha - 1} e^{-\beta \lambda} \quad \text{for} \quad \lambda > 0, \quad \alpha, \beta > 0$In an attempt to improve the model used in the mini-project, we want to exploit the information about the number of goals made in a certain match.$ Here, $\Gamma(\alpha)$ denotes the Gamma function. We want to compute the posterior $p(\lambda|y_1,\dots, y_N) based on goals from $N$ matches. i) Write down Bayes' formula for this problem. ii) What are observed and latent variables for this problem? iii) What is the prior and likelihood for this problem?","\begin{enumerate}\item[i)] \[p(\lambda \mid y_1, \dots, y_N) = \frac{p(y_1, \dots, y_N \mid \lambda) p(\lambda)}{p(y_1, \dots, y_N)}\]\item[ii)] Latent variable: $\lambda$. Observed variables: $y_1, \dots, y_N$\item[iii)] Prior distribution: $p(\lambda)$. Likelihood: $p(y_1, \dots, y_N \mid \lambda)$\end{enumerate}","```python
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+
+def p(x):
+   # The unnormalised target density
+   return np.exp(-x ** 4)
+
+def q(x,sigma):
+   # The proposal density.
+   return scipy.stats.norm.pdf(x, 0, sigma)
+
+# Standard deviation of proposal
+sigma = 1
+
+# Plot p(x) and q(x)
+xs = np.linspace(-7, 7, 1000)
+plt.plot(xs, p(xs), label='Target p(x)')
+plt.plot(xs, q(xs,sigma), label='Proposal q(x)')
+plt.legend() 
+plt.show() 
+
+# Implement your importance sampling here 
+N = 10000 # number of samples
+samples = np.random.normal(0, sigma, N) # generate samples from proposal distribution
+weights = p(samples) / q(samples, sigma) # compute weights
+weights /= np.sum(weights) # normalise weights
+mean_x = np.sum(weights * samples) # compute mean
+var_x = np.sum(weights * (samples - mean_x) ** 2) # compute variance
+
+print('The estimated variance of X is: ', var_x)
+```
+
+The code provided above implements importance sampling to estimate the variance of a random variable X following a density $p(x) = \frac{1}{Z}exp(-x^4)$.
+
+1. **Choice of sigma:**
+
+    - **Too small:** If sigma is too small, the proposal distribution $q(x)$ will be very narrow and will not cover the entire range of the target distribution $p(x)$. This will result in a high rejection rate, meaning that many samples will be rejected, and the algorithm will be inefficient.
+
+    - **Too large:** If sigma is too large, the proposal distribution $q(x)$ will be too broad and will not accurately reflect the shape of the target distribution $p(x)$. This will result in a low rejection rate, but the samples will be drawn from areas where the target distribution is low, resulting in a high variance of the estimated expectation.
+
+    - **Optimal sigma:** For this problem, a standard deviation of 1 seems to be a good choice, as it covers a significant portion of the target distribution while not being too broad.
+
+2. **Implementation of Importance Sampling:**
+
+    - The code generates samples from the proposal distribution $q(x)$ using `np.random.normal(0, sigma, N)`.
+    - It then computes the weights for each sample using the formula `p(samples) / q(samples, sigma)`.
+    - The weights are then normalised using `np.sum(weights)`.
+    - Finally, the mean and variance of X are computed using the normalised weights.
+
+3. **Results:** The estimated variance of X is printed, which is a good approximation of the true variance.
+
+This demonstrates that importance sampling is a powerful technique for estimating expectations when the target distribution is difficult or impossible to sample from directly. By carefully choosing the proposal distribution and using an appropriate number of samples, one can obtain a reasonably accurate estimate of the expectation.
+"
+21,1,4,c,Essay,Null,"Denote the number of goals made by a certain team in the match $i$ as $y_i$. We assume $y_i$ to be Poisson distributed: $p(y_i = k | \lambda) = \text{Pois}(k; \lambda) = \frac{1}{k!} \lambda^k e^{-\lambda} \quad \text{for} \quad k = 0, 1, 2, \dots, \quad \text{and} \quad \lambda > 0$ where $\lambda$ is a parameter determining how many goals the team does on average during a match. The team plays $\N$ matches with the number of goals being $y_1, \dots, y_N$ for these $N$ matches. We assume that all $y_1, \dots, y_N$ are conditionally independent given $\lambda$. For the parameter $\lambda$, we choose the so-called Gamma distribution: $p(\lambda) = \text{Gamma}(\lambda; \alpha, \beta) = \frac{1}{\Gamma(\alpha)} \beta^\alpha \lambda^{\alpha - 1} e^{-\beta \lambda} \quad \text{for} \quad \lambda > 0, \quad \alpha, \beta > 0$In an attempt to improve the model used in the mini-project, we want to exploit the information about the number of goals made in a certain match.$ Here, $\Gamma(\alpha)$ denotes the Gamma function. We want to compute the posterior $p(\lambda|y_1,\dots, y_N) based on goals from $N$ matches. Show that the posterior is a Gamma distribution $p(\lambda|y_1\dots, y_N) = \text{Gamma}(\lambda;\alpha^*,\Beta^*)$ and determine its parameters $\alpha^*, \Beta^*$ as a function of $\alpha, \Beta, y_1\dots,y_N$","\begin{equation}\begin{aligned}p(\lambda | y_1, ..., y_N) &\propto p(y_1, ..., y_N | \lambda)p(\lambda) \\&\propto \lambda^{\prod_{i=1}^Ny_i}e^{-N\lambda}\lambda^{\alpha-1}e^{-\beta\lambda} \\&= \lambda^{\prod_{i=1}y_i+\alpha-1}e^{-(\beta+N)\lambda} \\&= \lambda^{\alpha^*-1}e^{-\beta^*\lambda}\\&\propto \text{Gamma}(\lambda;\alpha^*,\beta^*)\end{aligned}\end{equation}This is proportional to a Gamma distribution with \begin{equation*}    \alpha^* = \alpha + \sum_{i=1}^Ny_i\quad \beta^* = \beta + N\end{equation*}Hence, the Gamma distribution is a conjugate prior to the Poisson distribution where the parameters of the posterior are given above.","```python
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+
+def p(x):
+   # The unnormalised target density
+   return np.exp(-x ** 4)
+
+def q(x,sigma):
+   # The proposal density.
+   return scipy.stats.norm.pdf(x, 0, sigma)
+
+# Standard deviation of proposal
+sigma = 1
+
+# Plot p(x) and q(x)
+xs = np.linspace(-7, 7, 1000)
+plt.plot(xs, p(xs), label='Target p(x)')
+plt.plot(xs, q(xs,sigma), label='Proposal q(x)')
+plt.legend() 
+plt.show() 
+
+# Implement your importance sampling here 
+N = 10000 # number of samples
+samples = np.random.normal(0, sigma, N) # generate samples from proposal distribution
+weights = p(samples) / q(samples, sigma) # compute weights
+weights /= np.sum(weights) # normalise weights
+mean_x = np.sum(weights * samples) # compute mean
+var_x = np.sum(weights * (samples - mean_x) ** 2) # compute variance
+
+print('The estimated variance of X is: ', var_x)
+```
+
+The code provided above implements importance sampling to estimate the variance of a random variable X following a density $p(x) = \frac{1}{Z}exp(-x^4)$.
+
+1. **Choice of sigma:**
+
+    - **Too small:** If sigma is too small, the proposal distribution $q(x)$ will be very narrow and will not cover the entire range of the target distribution $p(x)$. This will result in a high rejection rate, meaning that many samples will be rejected, and the algorithm will be inefficient.
+
+    - **Too large:** If sigma is too large, the proposal distribution $q(x)$ will be too broad and will not accurately reflect the shape of the target distribution $p(x)$. This will result in a low rejection rate, but the samples will be drawn from areas where the target distribution is low, resulting in a high variance of the estimated expectation.
+
+    - **Optimal sigma:** For this problem, a standard deviation of 1 seems to be a good choice, as it covers a significant portion of the target distribution while not being too broad.
+
+2. **Implementation of Importance Sampling:**
+
+    - The code generates samples from the proposal distribution $q(x)$ using `np.random.normal(0, sigma, N)`.
+    - It then computes the weights for each sample using the formula `p(samples) / q(samples, sigma)`.
+    - The weights are then normalised using `np.sum(weights)`.
+    - Finally, the mean and variance of X are computed using the normalised weights.
+
+3. **Results:** The estimated variance of X is printed, which is a good approximation of the true variance.
+
+This demonstrates that importance sampling is a powerful technique for estimating expectations when the target distribution is difficult or impossible to sample from directly. By carefully choosing the proposal distribution and using an appropriate number of samples, one can obtain a reasonably accurate estimate of the expectation.
+"
+22,1,4,d,Essay,Null,"Denote the number of goals made by a certain team in the match $i$ as $y_i$. We assume $y_i$ to be Poisson distributed: $p(y_i = k | \lambda) = \text{Pois}(k; \lambda) = \frac{1}{k!} \lambda^k e^{-\lambda} \quad \text{for} \quad k = 0, 1, 2, \dots, \quad \text{and} \quad \lambda > 0$ where $\lambda$ is a parameter determining how many goals the team does on average during a match. The team plays $\N$ matches with the number of goals being $y_1, \dots, y_N$ for these $N$ matches. We assume that all $y_1, \dots, y_N$ are conditionally independent given $\lambda$. For the parameter $\lambda$, we choose the so-called Gamma distribution: $p(\lambda) = \text{Gamma}(\lambda; \alpha, \beta) = \frac{1}{\Gamma(\alpha)} \beta^\alpha \lambda^{\alpha - 1} e^{-\beta \lambda} \quad \text{for} \quad \lambda > 0, \quad \alpha, \beta > 0$In an attempt to improve the model used in the mini-project, we want to exploit the information about the number of goals made in a certain match.$ Here, $\Gamma(\alpha)$ denotes the Gamma function. We want to compute the posterior $p(\lambda|y_1,\dots, y_N) based on goals from $N$ matches. Based on the Gamma posterior $p(\lambda|y_1,\dots,y_N) = $ Gamma $(\lambda;\alpha^*,\beta^*)$, you now want to find the predictive distribution $p(y^*|y_1,\dots,y_N)$, i.e., the distribution of the number of goals in a new match $y^*$ conditioned on the number of goals scored in all previous $N$ matches. Show that the predictive distribution is a negative binomial distribution $p(y^*=k|y_1,\dots,y_N) = \text{Neg-bin}(k;r,p) = \frac{\Gamma(k+r)}{k!\Gamma(r)}(1-p)^kp^r$ and determine the parameters $p$ and $r$ above.","The predictive distribution $p(y^*|y_1,\dots,y_N)$ we get by multiplying the likelihood for the new datapoint $y^*$ with the posterior and marginalize out $\lambda$. \begin{equation}\begin{aligned}p(y^*|y_1,\dots,y_N) &= \int_0^{\infty} p(y^*|\lambda)p(\lambda|y_1,\dots,y_N)d\lambda \\ &= \int_0^{\infty}\frac{\lambda^{y^*}e^{-\lambda}}{y^*!}\frac{(\beta^*)^{\alpha^*}\lambda^{\alpha^*-a}e^{-\beta^*\lambda}}{\Gamma(\alpha^*)} \\&=\frac{(\beta^*)^{\alpha^*}\Gamma(y^*+\alpha^*)}{(\beta^*+1)^{y^*+\alpha^*}y^*!\Gamma(\alpha^*)} \int_0^{\infty} \frac{(\beta^*+1)^{y^*+\alpha^*}\lambda^{y^*+\alpha^*-1}e^{-(\beta^*+1)\lambda}}{\Gamma(y^*+\alpha^*)} d\lambda\\&= \frac{(\beta^*)^{\alpha^*}\Gamma(y^*+\alpha^*)}{(\beta^*+1)^{y^*+\alpha^*}y^*!\Gamma(\alpha^*)} \int_0^{\infty}\text{Gamma}(\lambda;y^*+\alpha^*,\beta^*+1)d\lambda \\&=\frac{(\beta^*)^{\alpha^*}\Gamma(y^*+\alpha^*)}{(\beta^*+1)^{y^*+\alpha^*}y^*!\Gamma(\alpha^*)}\\&=\frac{\Gamma(y^*+\alpha^*}{y^*!\Gamma(\alpha^*)}\left( \frac{\beta^*}{\beta^*+1}\right)^{\alpha^*} \left(1-\frac{\beta^*}{\beta^*+1} \right)^{y^*} \\&= \textbf{Neg-bin}\left(y^*;\alpha^*,\frac{\beta^*}{\beta^*+1} \right)\end{aligned}\end{equation}","```python
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
+
+def p(x):
+   # The unnormalised target density
+   return np.exp(-x ** 4)
+
+def q(x,sigma):
+   # The proposal density.
+   return scipy.stats.norm.pdf(x, 0, sigma)
+
+# Standard deviation of proposal
+sigma = 1
+
+# Plot p(x) and q(x)
+xs = np.linspace(-7, 7, 1000)
+plt.plot(xs, p(xs), label='Target p(x)')
+plt.plot(xs, q(xs,sigma), label='Proposal q(x)')
+plt.legend() 
+plt.show() 
+
+# Implement your importance sampling here 
+N = 10000 # number of samples
+samples = np.random.normal(0, sigma, N) # generate samples from proposal distribution
+weights = p(samples) / q(samples, sigma) # compute weights
+weights /= np.sum(weights) # normalise weights
+mean_x = np.sum(weights * samples) # compute mean
+var_x = np.sum(weights * (samples - mean_x) ** 2) # compute variance
+
+print('The estimated variance of X is: ', var_x)
+```
+
+The code provided above implements importance sampling to estimate the variance of a random variable X following a density $p(x) = \frac{1}{Z}exp(-x^4)$.
+
+1. **Choice of sigma:**
+
+    - **Too small:** If sigma is too small, the proposal distribution $q(x)$ will be very narrow and will not cover the entire range of the target distribution $p(x)$. This will result in a high rejection rate, meaning that many samples will be rejected, and the algorithm will be inefficient.
+
+    - **Too large:** If sigma is too large, the proposal distribution $q(x)$ will be too broad and will not accurately reflect the shape of the target distribution $p(x)$. This will result in a low rejection rate, but the samples will be drawn from areas where the target distribution is low, resulting in a high variance of the estimated expectation.
+
+    - **Optimal sigma:** For this problem, a standard deviation of 1 seems to be a good choice, as it covers a significant portion of the target distribution while not being too broad.
+
+2. **Implementation of Importance Sampling:**
+
+    - The code generates samples from the proposal distribution $q(x)$ using `np.random.normal(0, sigma, N)`.
+    - It then computes the weights for each sample using the formula `p(samples) / q(samples, sigma)`.
+    - The weights are then normalised using `np.sum(weights)`.
+    - Finally, the mean and variance of X are computed using the normalised weights.
+
+3. **Results:** The estimated variance of X is printed, which is a good approximation of the true variance.
+
+This demonstrates that importance sampling is a powerful technique for estimating expectations when the target distribution is difficult or impossible to sample from directly. By carefully choosing the proposal distribution and using an appropriate number of samples, one can obtain a reasonably accurate estimate of the expectation.
+"
