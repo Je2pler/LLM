@@ -131,7 +131,7 @@ class ChatBot:
 
         return f"""
 <instruction>\n
-Answer the question and explain it to someone who is unfamilliar with the course. If possible, answer using the course book as context. Otherwise, inform the user that you are not answering using the course book.\n
+Answer the question and explain it to someone who is unfamiliar with the course. If possible, answer using the course book as context. Otherwise, inform the user that you are not answering using the course book.\n
 </instruction>\n\n
 
 <course book>\n
