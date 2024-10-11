@@ -87,15 +87,16 @@ class ChatBot:
 
         return qa_pairs
     
-    def check_relevance(self, answer: str, context: str) -> bool:
+    def check_relevance(self, question: str, answer: str, context: str) -> bool:
         response = self.model.generate_content(
-            f'<instruction>Was the following context used to create the following answer? '+
+            f'<instruction>Was the following context used to answer the question? '+
             f'Answer yes or no. </instruction><context>{context}</context>'+
+            f'<question>{question}</question>' +
             f'<answer>{answer}</answer>'
         )
         return 'yes' in response.text.lower()
     
-    def __call__(self, prompt: str, contexts: List[str], on_complete: Callable[[str], None] = lambda x: None) -> Generator[str, None, None]:
+    def __call__(self, question: str, prompt: str, contexts: List[str], on_complete: Callable[[str], None] = lambda x: None) -> Generator[str, None, None]:
         """
         Generate response to prompt. 
 
@@ -111,11 +112,11 @@ class ChatBot:
         refrences = [
             f'p{page_nr}'
             for page_nr, context in contexts
-            if self.check_relevance(answer, context)
+            if self.check_relevance(question, answer, context)
         ]
 
         if len(refrences) > 0:
-            ref = f'\n**Refrences**: ' + ', '.join(refrences)
+            ref = f'\n**Refrences**: Barber,  David., *Bayesian Reasoning and Machine Learning*, ' + ', '.join(refrences)
             answer += ref
             yield ref
         
@@ -143,16 +144,23 @@ Answer the question and explain it to someone who is unfamiliar with the course.
 </question>
     """, db_result
 
-def gemini_response_generator(model: genai.GenerativeModel, prompt: str) -> str:
-    """
-    Produces a response for the ``prompt``
-    through the Google Gemeni API. 
+def save_uploaded_file(uploaded_file):
+    # Create a temporary path to save the file
+    temp_file_path = os.path.join("temp", uploaded_file.name)
+    
+    # Ensure the temp directory exists
+    if not os.path.exists("temp"):
+        os.makedirs("temp")
+    
+    # Save the file to disk
+    with open(temp_file_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+    
+    return temp_file_path
 
-    ## Parameters
-     - ``model`` The ``genai.GenerativeModel`` to use. 
-     - ``prompt`` Prompt to submit to Gemini. 
-    """
-    return model.generate_content(prompt).text
+@st.cache_data
+def upload_to_gemini(file_path, *args, **kwargs):
+    return genai.upload_file(file_path, *args, **kwargs)
 
 def draw_page(chat_bot: ChatBot) -> None:
     """
@@ -165,6 +173,8 @@ def draw_page(chat_bot: ChatBot) -> None:
     # Write title
     st.header('APML AI Tutor')
 
+    st.sidebar.title('Upload file')
+    uploaded_file = st.sidebar.file_uploader("Upload a file", label_visibility="collapsed")
     st.sidebar.title("Settings")
     developer_mode = st.sidebar.toggle('Developer Mode')
     st.sidebar.button('Clear history', clear_history)
@@ -176,16 +186,14 @@ def draw_page(chat_bot: ChatBot) -> None:
                 st.markdown(message['prompt'])
             else:
                 st.markdown(message['message'])
+            
+            if 'image_path' in message:
+                st.image(message['image_path'], width=200)
 
     # Accept user input
     if user_input := st.chat_input('Say something...'):
-        prompt, refrences = chat_bot.generate_prompt_and_references(user_input)
 
-        with st.chat_message('user'):
-            if developer_mode:
-                st.markdown(prompt)
-            else:
-                st.markdown(user_input)
+        prompt, refrences = chat_bot.generate_prompt_and_references(user_input)
         
         st.session_state.messages.append({
             'role': 'user',
@@ -193,8 +201,25 @@ def draw_page(chat_bot: ChatBot) -> None:
             'prompt': prompt
         })
 
+        with st.chat_message('user'):
+            if developer_mode:
+                st.markdown(prompt)
+            else:
+                st.markdown(user_input)
+
+            # Handle the uploaded file
+            if uploaded_file is not None:
+                print(uploaded_file.name)
+                print(uploaded_file._file_urls.upload_url)
+                file_path = save_uploaded_file(uploaded_file)
+                myfile = upload_to_gemini(file_path)
+                prompt = [prompt, myfile]
+                st.session_state.messages[-1]['image_path'] = file_path
+                st.image(file_path, width=200)
+
         # Write response
         response = chat_bot(
+            user_input,
             prompt, 
             refrences, 
             lambda response: st.session_state.messages.append({
