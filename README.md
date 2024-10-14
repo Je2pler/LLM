@@ -34,3 +34,10 @@ There are several versions of the chatbot:
 - Naive model with context ``streamlit run ChatBotWBook.py``
 
 ## Training the Chat Bot
+This secion convers how to extract text and equations from a pdf and encoding the vector database. 
+
+### Downlaoding the Book
+The book used was [*Bayesian Reasoning and Machine Learning*](http://web4.cs.ucl.ac.uk/staff/D.Barber/textbook/090310.pdf) by David Barber. Put the file in the top directory and name it ``APML-book.pdf``. 
+
+### Converting the PDF to LaTeX
+Since the book contains a lot of equations, *normal* text extraction would not yield satisfactory results. To convert the book into LaTeX, run the python script [``training_data/pdf2latex.py``](training_data/pdf2latex.py). 
