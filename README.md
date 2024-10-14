@@ -26,7 +26,7 @@ api_key="<your API key here>"
 The API-key can be aquired from [Google AI Studio](https://aistudio.google.com/). 
 
 ### Downloading the Vector Datase Contents
-The contents of the vector database is too large to fit on git. To add it to your local repository, download [this zip file]() and copy the ``.db`` directory into the the top directory of your repository. 
+The contents of the vector database is too large to fit on git. To add it to your local repository, download [this zip file](https://drive.google.com/file/d/1xQxFR54ikSYHL9si9SfqCWufk0NgsXaV/view?usp=sharing) and copy the ``.db`` directory into the the top directory of your repository. 
 
 It is also possible to generate the database by running the training script, see section [Traing the Chat Bot](#training-the-chat-bot). Note that this is expected to take 1-2 hours with GPU accerlation enabled. 
 
