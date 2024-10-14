@@ -11,15 +11,22 @@ print('Import complete')
 THRESHOLD = 200
 PADDING = 25
 
+TOP_CUT_OFF = 128
+BOTTOM_CUT_OFF = 2220
+
+INPUT_FILE = 'APML-book.pdf'
+
+PAGE_INTERVAL = range(24, 638)
+
 print('Loading models')
 model = texify.model.model.load_model()
 processor = texify.model.processor.load_processor()
 
 
-for page_nr in range(24, 638): # 24
+for page_nr in PAGE_INTERVAL:
     print(f'Converting page {page_nr+1}')
-    image, = pdf2image.convert_from_path('APMASK-book.pdf', first_page=page_nr, last_page=page_nr)
-    image = np.array(image.convert('L'))[128:2220]
+    image, = pdf2image.convert_from_path(INPUT_FILE, first_page=page_nr, last_page=page_nr)
+    image = np.array(image.convert('L'))[TOP_CUT_OFF:BOTTOM_CUT_OFF]
     
     print(f'Finding image slices from page {page_nr+1}')
     image_slices = list()
@@ -52,7 +59,7 @@ for page_nr in range(24, 638): # 24
             start = 0
     
     if len(image_slices) > 0:
-        with open(f'training_data/APML-book/{page_nr:04}.tex', 'w', encoding='utf-8') as file:
+        with open(f'training_data/{INPUT_FILE[:-4]}/{page_nr:04}.tex', 'w', encoding='utf-8') as file:
             print(f'Converting {len(image_slices)} paragaphs')
             paragraphs = texify.inference.batch_inference(image_slices, model, processor)
             file.write('\n'.join(paragraphs))

@@ -1,6 +1,11 @@
 # Teaching AI to Teach AI – APML Tutor
 The aim of this project is to crate a chatbot that can answer questions about the course 1RT705 Advanced Probabilistic Machine Learning at Uppsala university. 
 
+## Table of Contents
+ - [Intsalling](#installing)
+ - [Running the Chat Bot](#running-the-chat-bot)
+ - [Training the Chat Bot](#training-the-chat-bot)
+
 ## Installing
 This section will cover steps to install and configure the app as well as downloading the dataset. 
 

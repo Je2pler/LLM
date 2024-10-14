@@ -6,22 +6,31 @@ import google.generativeai as genai
 import chromadb
 import os
 
+recursive_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=5000,
+    chunk_overlap=0
+)
+
+def get_paragraphs(path: str):
+    for filename in os.listdir(path):
+        if filename[-4:] != '.tex':
+            continue
+    
+        page_nr = int(filename[:-4])
+
+        with open(f'{path}/{filename}', encoding='utf-8') as file:
+            for paragraph in file.readlines():
+                paragraph = paragraph.strip('\n')
+
+                if len(paragraph) > 0:
+                    yield page_nr, paragraph
+
 print('Configuring')
 
 genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
 embedding_function = chromadb.utils.embedding_functions.google_embedding_function.GoogleGenerativeAiEmbeddingFunction(api_key=os.getenv('GOOGLE_API_KEY'))
 
 NAME = 'APML-book'
-
-semantic_splitter = SemanticChunker(
-    GoogleGenerativeAIEmbeddings(model="models/embedding-001"), 
-    number_of_chunks=500
-)
-
-recursive_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000,
-    chunk_overlap=200
-)
 
 db = chromadb.PersistentClient('./.db')
 
@@ -32,36 +41,69 @@ if NAME in (collection.name for collection in db.list_collections()):
 else:
     collection = db.create_collection(NAME, embedding_function=embedding_function)
 
-print('Reading data')
+print('Processing data')
 
-with open('training_data/output.tex', encoding='utf-8') as file:
-    text = '\n'.join(file.readlines())
+paragraphs = list()
+page_nrs = list()
+cache_length = 0
 
-print('Chunking data')
+current_page = 0
+paragraphs_on_page = 0
 
-preliminary_chunks = semantic_splitter.split_text(text)
-chunks = list()
-I = len(preliminary_chunks)
+for page_nr, paragraph in get_paragraphs('training_data/APML-book'):
+    print(f'Processing page {page_nr} ({current_page}:{paragraphs_on_page})   ', end='\r')
+    page_nrs.append(page_nr)
+    paragraphs.append(paragraph)
+    cache_length += len(paragraph)
 
-for i, chunk in enumerate(preliminary_chunks):
-    print(f'Checking {i}/{I}', end='\r')
-    if len(chunk) > 10_000:
-        chunks += recursive_splitter.split_text(chunk)
-    else:
-        chunks.append(chunk)
+    while cache_length > 2_500:
+        cache_length -= len(paragraphs[0])
 
-print(f'Checking {I}/{I}')
+        if page_nr != current_page:
+            current_page = page_nr
+            paragraphs_on_page = 0
+        
+        content = paragraphs[0]
 
-I = len(chunks)
+        if len(content) < 10_000:
+            content = [content]
+        else:
+            content = recursive_splitter.split_text(content)
+        
+        for embedding_paragraph in content:
+            collection.upsert(
+                documents=['\n\n'.join(paragraphs)],
+                embeddings=[
+                    genai.embed_content(
+                        model='models/embedding-001',
+                        content=embedding_paragraph,
+                        task_type='retrieval_document',
+                        title='Probobalistic Machine Learning'
+                    )['embedding']
+                ],
+                ids=[f'{current_page}:{paragraphs_on_page}']
+            )
 
-for i, chunk in enumerate(chunks):
-    print(f'Embedding {i}/{I}', end='\r')
+        page_nrs.pop(0)
+        paragraphs.pop(0)
+        paragraphs_on_page += 1
+
+while len(paragraphs) > 0:
     collection.upsert(
-        documents=[chunk],
-        ids=[f'id{i}']
+        documents=['\n\n'.join(paragraphs)],
+        embeddings=[
+            genai.embed_content(
+                model='models/embedding-001',
+                content=paragraphs[0],
+                task_type='retrieval_document',
+                title='Probobalistic Machine Learning'
+            )['embedding']
+        ],
+        ids=[f'{current_page}:{paragraphs_on_page}']
     )
 
-print(f'Embedding: {I}/{I}')
+    page_nrs.pop(0)
+    paragraphs.pop(0)
+    paragraphs_on_page += 1
 
-results = collection.query(query_texts=['What is the differance between supervised and unsupervised learning? '], n_results=10)
-print('\n\n----------\n\n'.join(results['documents'][0]))
+print('\nComplete')
