@@ -177,7 +177,6 @@ def draw_page(chat_bot: ChatBot) -> None:
     uploaded_file = st.sidebar.file_uploader("Upload a file", label_visibility="collapsed")
     st.sidebar.title("Settings")
     developer_mode = st.sidebar.toggle('Developer Mode')
-    st.sidebar.button('Clear history', clear_history)
 
     # Display chat history
     for message in st.session_state.messages:
@@ -230,9 +229,6 @@ def draw_page(chat_bot: ChatBot) -> None:
 
         with st.chat_message('ai'):
             st.write_stream(response)
-
-def clear_history(): 
-    pass
 
 def main() -> None:
     """

@@ -55,8 +55,7 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
     # Write title
     st.header('1RT730 Chatbot')
 
-    st.sidebar.title("Predefined functions")
-    st.sidebar.button('Generate Exam', generate_exam)
+    st.sidebar.title("Upload file")
     uploaded_file = st.sidebar.file_uploader("Upload a file", label_visibility="collapsed")
 
     # Display chat history
@@ -94,9 +93,6 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
             'role': 'ai',
             'content': response
         })
-
-def generate_exam(): 
-    pass
 
 def main() -> None:
     """

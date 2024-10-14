@@ -126,9 +126,8 @@ def draw_page(chat_bot: ChatBot) -> None:
     # Write title
     st.header('APML AI Tutor')
 
-    st.sidebar.title("Predefinied functions")
+    st.sidebar.title("Settings")
     developer_mode = st.sidebar.toggle('Developer Mode')
-    st.sidebar.button('Generate Exam', generate_exam)
 
     # Display chat history
     for message in st.session_state.messages:
@@ -166,9 +165,6 @@ def draw_page(chat_bot: ChatBot) -> None:
 
         with st.chat_message('ai'):
             st.write_stream(response)
-
-def generate_exam(): 
-    pass
 
 def main() -> None:
     """

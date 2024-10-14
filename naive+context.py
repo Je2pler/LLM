@@ -68,7 +68,6 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
     st.header('1RT730 Chatbot')
 
     st.sidebar.title("Predefinied functions")
-    st.sidebar.button('Generate Exam', generate_exam)
 
     # Display chat history
     for message in st.session_state.messages:
@@ -96,9 +95,6 @@ def draw_page(response_generator: Callable[[str], str]) -> None:
             'role': 'ai',
             'content': response
         })
-
-def generate_exam(): 
-    pass
 
 def main() -> None:
     """
