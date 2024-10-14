@@ -33,10 +33,10 @@ It is also possible to generate the database by running the training script, see
 ## Running the Chat Bot
 There are several versions of the chatbot:
 
-- RAG and fewshot ``streamlit run main.py``
-- fewshot only ``streamlit run model_with_examples.py``
-- RAG only ``steramlit run RAG``
-- Naive model with context ``streamlit run ChatBotWBook.py``
+- RAG and fewshot ``streamlit run rag+fewshot.py``
+- fewshot only ``streamlit run fewshot.py``
+- RAG only ``steramlit run rag.py``
+- Naive model with context ``streamlit run naive+context.py``
 
 ## Training the Chat Bot
 This secion convers how to extract text and equations from a pdf and encoding the vector database. 
