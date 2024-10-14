@@ -167,7 +167,7 @@ def draw_page(chat_bot: ChatBot) -> None:
     Produces streamlit page. 
 
     ## Parameters
-     - ``response_generator`` Callback function to generate response. 
+     - ``chat_bot`` Chatbot. 
     """
 
     # Write title

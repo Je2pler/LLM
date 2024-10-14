@@ -6,6 +6,8 @@ import google.generativeai as genai
 import chromadb
 import os
 
+NAME = 'APML-book'
+
 recursive_splitter = RecursiveCharacterTextSplitter(
     chunk_size=5000,
     chunk_overlap=0
@@ -30,8 +32,6 @@ print('Configuring')
 genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
 embedding_function = chromadb.utils.embedding_functions.google_embedding_function.GoogleGenerativeAiEmbeddingFunction(api_key=os.getenv('GOOGLE_API_KEY'))
 
-NAME = 'APML-book'
-
 db = chromadb.PersistentClient('./.db')
 
 print('Initializing database')
@@ -50,7 +50,7 @@ cache_length = 0
 current_page = 0
 paragraphs_on_page = 0
 
-for page_nr, paragraph in get_paragraphs('training_data/APML-book'):
+for page_nr, paragraph in get_paragraphs(f'rag_training/{NAME}'):
     print(f'Processing page {page_nr} ({current_page}:{paragraphs_on_page})   ', end='\r')
     page_nrs.append(page_nr)
     paragraphs.append(paragraph)
